@@ -42,6 +42,7 @@ public class PokeApiService {
             
             JSONObject json = new JSONObject(jsonResponse.toString());
             
+            //linhas 46 - 62: verificar com calma e ajustar caso necessário, JSON
             int id = json.getInt("id");
             String nome = json.getString("name");
             

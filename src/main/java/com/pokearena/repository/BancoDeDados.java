@@ -90,4 +90,94 @@ public class BancoDeDados {
 
         return pokemons;
     }
+
+    public static void salvarTreinador(Treinador treinador) {
+        String sql = "INSERT INTO treinadores (nome) VALUES (?) ON CONFLICT (nome) DO NOTHING";
+
+        Connection conn = conectar();
+        if (conn == null) {
+            return;
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, treinador.getNome());
+            stmt.executeUpdate();
+            System.out.println("Treinador " + treinador.getNome() + " salvo com sucesso!");
+
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar treinador: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void associarPokemonATreinador(String nomeTreinador, int pokemonId) {
+        String sql = "INSERT INTO treinador_pokemon (treinador_nome, pokemon_id) VALUES (?, ?) " +
+                     "ON CONFLICT DO NOTHING";
+
+        Connection conn = conectar();
+        if (conn == null) {
+            return;
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nomeTreinador);
+            stmt.setInt(2, pokemonId);
+            stmt.executeUpdate();
+            System.out.println("Pokemon " + pokemonId + " associado ao treinador " + nomeTreinador);
+
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao associar pokemon ao treinador: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Pokemon> buscarPokemonsDoTreinador(String nomeTreinador) {
+        List<Pokemon> pokemons = new ArrayList<>();
+        String sql = "SELECT p.id, p.nome, p.tipo, p.ataque, p.defesa, p.hp, p.hp_maximo, p.sprite " +
+                     "FROM pokemons p " +
+                     "INNER JOIN treinador_pokemon tp ON p.id = tp.pokemon_id " +
+                     "WHERE tp.treinador_nome = ? " +
+                     "ORDER BY p.nome";
+
+        Connection conn = conectar();
+        if (conn == null) {
+            return pokemons;
+        }
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nomeTreinador);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                String tipo = rs.getString("tipo");
+                int ataque = rs.getInt("ataque");
+                int defesa = rs.getInt("defesa");
+                int hp = rs.getInt("hp");
+                int hpMaximo = rs.getInt("hp_maximo");
+                String sprite = rs.getString("sprite");
+
+                Pokemon pokemon = new Pokemon(id, nome, ataque, defesa, hpMaximo, tipo, sprite);
+                pokemon.setHp(hp);
+                pokemons.add(pokemon);
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar pokemons do treinador: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return pokemons;
+    }
 }
