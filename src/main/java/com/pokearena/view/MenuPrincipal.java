@@ -6,7 +6,7 @@ import java.sql.Connection;
 public class MenuPrincipal {
     public static void main(String[] args) {
         System.out.println("=== POKEARENA ===");
-        // fazer a conexão com o banco usando conn
+        Connection conn = BancoDeDados.conectar();
 
         if (conn != null) {
             System.out.println("Conexão com o banco bem-sucedida");
