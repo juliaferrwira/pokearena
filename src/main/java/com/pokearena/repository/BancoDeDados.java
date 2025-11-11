@@ -1,6 +1,7 @@
 package com.pokearena.repository;
 
 import com.pokearena.model.Pokemon;
+import com.pokearena.model.Treinador;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -179,5 +180,23 @@ public class BancoDeDados {
         }
 
         return pokemons;
+    }
+
+    public static void concederInsignia(String nomeTreinador, int insigniaId) {
+        String sql = "INSERT INTO treinador_insignia (treinador_nome, insignia_id) VALUES (?, ?)";
+        Connection conn = conectar();
+        if (conn == null) return;
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, nomeTreinador);
+            stmt.setInt(2, insigniaId);
+            stmt.executeUpdate();
+            System.out.println("Insignia concedida ao treinador " + nomeTreinador);
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao conceder insignia: " + e.getMessage());
+        }
     }
 }

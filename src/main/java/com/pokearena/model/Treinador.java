@@ -3,6 +3,8 @@ package com.pokearena.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pokearena.repository.BancoDeDados;
+
 public class Treinador {
     private String nome;
     private List<Pokemon> pokemons;
@@ -12,12 +14,14 @@ public class Treinador {
         this.nome = nome;
         this.pokemons = new ArrayList<>();
         this.insignias = new ArrayList<>();
+        BancoDeDados.salvarTreinador(nome);
     }
 
     // Métodos para gerenciar pokémons
     public void adicionarPokemon(Pokemon pokemon) {
         if (pokemon != null) {
             pokemons.add(pokemon);
+            BancoDeDados.associarPokemonATreinador(this.nome, pokemon.getId());
         }
     }
 
