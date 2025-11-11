@@ -82,6 +82,4 @@ public class Treinador {
                 ", insignias=" + insignias.size() +
                 '}';
     }
-}{
-
 }
