@@ -1,5 +1,6 @@
 package com.pokearena.repository;
 
+import com.pokearena.model.Batalha;
 import com.pokearena.model.Pokemon;
 import com.pokearena.model.Treinador;
 
@@ -197,6 +198,26 @@ public class BancoDeDados {
             conn.close();
         } catch (SQLException e) {
             System.out.println("Erro ao conceder insignia: " + e.getMessage());
+        }
+    }
+
+    public static void salvarBatalha(Batalha batalha) {
+        String sql = "INSERT INTO batalhas (pokemon1_id, pokemon2_id, vencedor_id, data) VALUES (?, ?, ?, ?)";
+        Connection conn = conectar();
+        if (conn == null) return;
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, batalha.getPokemon1().getId());
+            stmt.setInt(2, batalha.getPokemon2().getId());
+            stmt.setInt(3, batalha.getVencedor().getId());
+            stmt.setTimestamp(4, Timestamp.valueOf(batalha.getData()));
+            stmt.executeUpdate();
+            System.out.println("Batalha salva no banco!");
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar batalha: " + e.getMessage());
         }
     }
 }
