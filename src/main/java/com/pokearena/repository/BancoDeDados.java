@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BancoDeDados {
-    private static final String URL = "jdbc:postgresql://localhost:5433/pokearena";
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
+    //private static final String URL = "jdbc:postgresql://localhost:5433/pokearena";
     private static final String USER = "postgres";
-    private static final String PASSWORD = "senha123";
+    //private static final String PASSWORD = "senha123";
+    private static final String PASSWORD = "root";
 
     public static Connection conectar() {
         try {
