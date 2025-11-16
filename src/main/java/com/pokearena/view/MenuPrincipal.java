@@ -5,15 +5,13 @@ import com.pokearena.repository.BancoDeDados;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
 
@@ -25,7 +23,8 @@ public class MenuPrincipal extends Application {
     private static final double FatorEscala = 1.1;
     private static final int DuracaoMS = 150;
     private static final String btnStyle = "-fx-padding: 0; -fx-background-color: transparent;" +
-                                            "-fx-min-width: 200px; -fx-min-height: 100px;";
+                                           "-fx-min-width: 200px; -fx-min-height: 100px;";
+    public MenuPrincipal(){}
     public static void animacaoHover(Button botao){
         ScaleTransition crescer = new ScaleTransition(Duration.millis(DuracaoMS),botao);
         crescer.setToX(FatorEscala);
@@ -79,6 +78,11 @@ public class MenuPrincipal extends Application {
                                            "-fx-background-position: center center; " +
                                            "-fx-background-repeat: no-repeat;";
 
+    public void changeScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
+        Scene newScene = new Scene(root,currentWidth,currentHeight);
+        stage.setScene(newScene);
+    }
+
     @Override
     public void start(Stage stage){
         Button btnIniciarJogo = new Button("");
@@ -93,14 +97,12 @@ public class MenuPrincipal extends Application {
         configBtn(btnIniciarJogo);
         configBtn(btnInsignias);
         configBtn(btnPokemon);
-
-        animacaoHover(btnIniciarJogo);
-        animacaoHover(btnInsignias);
-        animacaoHover(btnPokemon);
-
         putBtnIniciarImg(btnIniciarJogo);
         putBtnInsiImg(btnInsignias);
         putBtnPokemonImg(btnPokemon);
+        animacaoHover(btnIniciarJogo);
+        animacaoHover(btnInsignias);
+        animacaoHover(btnPokemon);
 
         VBox root = new VBox();
         root.setStyle(backgroundStyle);
@@ -111,18 +113,33 @@ public class MenuPrincipal extends Application {
         root.setSpacing(15);
         root.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(root,0,0);
+        Scene scene = new Scene(root,800,600);
         stage.setTitle("PokeArena");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
 
-        TelaBatalha battle1 = new TelaBatalha();
+        TelaTreinador TelaTreinador = new TelaTreinador();
+        BorderPane selectTrainerRoot = TelaTreinador.criarRootTreinador();
         btnIniciarJogo.setOnAction(e->{
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            Scene battleScene = battle1.criarSceneBatalha(1, currentWidth, currentHeight);
-            stage.setScene(battleScene);
+            changeScene(stage,selectTrainerRoot,currentWidth,currentHeight);
+        });
+        Node cardTrainer1 = selectTrainerRoot.lookup("#cardTrainer1");
+        Node cardTrainer2 = selectTrainerRoot.lookup("#cardTrainer2");
+        TelaBatalha screenBattle = new TelaBatalha();
+        cardTrainer1.setOnMouseClicked(e-> {
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            BorderPane battle1 = screenBattle.criarSceneBatalha(1,1);
+            changeScene(stage,battle1,currentWidth,currentHeight);
+        });
+        cardTrainer2.setOnMouseClicked(e->{
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            BorderPane battle1 = screenBattle.criarSceneBatalha(1,2);
+            changeScene(stage,battle1,currentWidth,currentHeight);
         });
     }
 
