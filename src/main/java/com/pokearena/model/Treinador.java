@@ -14,7 +14,7 @@ public class Treinador {
         this.nome = nome;
         this.pokemons = new ArrayList<>();
         this.insignias = new ArrayList<>();
-        BancoDeDados.salvarTreinador(nome);
+        BancoDeDados.salvarTreinador(this);
     }
 
     // Métodos para gerenciar pokémons
