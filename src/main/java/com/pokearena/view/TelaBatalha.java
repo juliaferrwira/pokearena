@@ -15,7 +15,8 @@ public class TelaBatalha extends VBox {
     private static final double FatorEscala = 1.1;
     private static final int DuracaoMS = 150;
     private static final String btnStyle = "-fx-padding: 0; -fx-background-color: transparent;" +
-            "-fx-min-width: 200px; -fx-min-height: 100px;";
+                                           "-fx-min-width: 200px; -fx-min-height: 100px;";
+
     private static final String hboxStyle = "-fx-background-color: rgba(0, 0, 0, 0.7); " +
                                             "-fx-border-color: white; " +
                                             "-fx-border-width: 3px; " +
@@ -82,7 +83,7 @@ public class TelaBatalha extends VBox {
                                            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
                                            "-fx-background-repeat: no-repeat;";
 
-   public Scene criarSceneBatalha(int whatBattle,double width, double height){
+   public BorderPane criarSceneBatalha(int whatBattle,int whatCard){
        Button btnAtacar = new Button();
        Button btnPokemon = new Button();
        Button btnBattleInfo = new Button();
@@ -114,7 +115,7 @@ public class TelaBatalha extends VBox {
        } else if (whatBattle==3) {
            root.setStyle(WallpaperBattle3);
        }
-       return new Scene(root, width, height);
+       return root;
    }
 
    public TelaBatalha() {
