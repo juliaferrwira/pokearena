@@ -1,0 +1,16 @@
+com\pokearena\view\TelaPokemon.class
+com\pokearena\exceptions\ErroPokemonNaoEncontrado.class
+com\pokearena\model\Pokemon.class
+com\pokearena\view\TelaTreinador.class
+com\pokearena\model\Treinador.class
+com\pokearena\model\Personagem.class
+com\pokearena\model\LigaKanto.class
+com\pokearena\repository\BancoDeDados.class
+com\pokearena\service\PokeApiService.class
+com\pokearena\view\MenuPrincipal.class
+com\pokearena\repository\PokemonRepository.class
+com\pokearena\model\Batalha.class
+com\pokearena\view\TelaBatalha.class
+com\pokearena\model\Liga.class
+com\pokearena\view\TelaInsignias.class
+com\pokearena\model\Insignia.class
