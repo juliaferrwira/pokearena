@@ -124,6 +124,15 @@ public class MenuPrincipal extends Application {
         
         TelaTreinador TelaTreinador = new TelaTreinador();
         BorderPane selectTrainerRoot = TelaTreinador.criarRootTreinador();
+
+        TelaInsignias TelaInsignias = new TelaInsignias();
+        BorderPane infoInsigniasRoot = TelaInsignias.criarRootTelaInsignias();
+
+        btnInsignias.setOnAction(e->{
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            changeScene(stage,infoInsigniasRoot,currentWidth,currentHeight);
+        });
         
         btnIniciarJogo.setOnAction(e->{
             double currentWidth = stage.getWidth();
