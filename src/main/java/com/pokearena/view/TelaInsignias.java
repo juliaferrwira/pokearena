@@ -1,68 +1,35 @@
 package com.pokearena.view;
 import com.pokearena.model.Insignia;
-import com.pokearena.model.Pokemon;
 import com.pokearena.repository.BancoDeDados;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
-import javafx.application.Application;
+import com.pokearena.service.ScreenService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
-import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TelaInsignias {
-    private static final double FatorEscala = 1.1;
-    private static final int DuracaoMS = 150;
-    final double DistanciaSubir = -50.0; // Sobe 50 pixels (valor negativo)
-    final double PosicaoOrigem = 0.0;
-    private static final String insiStyle = "-fx-padding: 0; -fx-background-color: transparent;";
+    public final double DistanciaSubir = -50.0; // Sobe 50 pixels (valor negativo)
+    public final double PosicaoOrigem = 0.0;
     private static final String infoStyle = "-fx-background-color: rgba(0, 0, 0, 0.7); " +
                                             "-fx-border-color: white; " +
                                             "-fx-border-width: 3px; " +
                                             "-fx-border-radius: 15px; " +
                                             "-fx-background-radius: 15px;";
 
-    public static String WallpaperTelaInsignias = "-fx-background-image: url('srcPokearena/wallpaper1.jpg'); " +
-                                                  "-fx-background-size: cover; " + "-fx-background-position: center center; " +
-                                                  "-fx-background-repeat: no-repeat;";
-
+    public String WallpaperTelaInsignias = "-fx-background-image: url('srcPokearena/wallpaper1.jpg'); " +
+                                           "-fx-background-size: cover; " + "-fx-background-position: center center; " +
+                                           "-fx-background-repeat: no-repeat;";
     private static final ArrayList<Insignia> InsiList = new ArrayList<>();
 
-    public static void animacaoHover(ImageView insignia){
-        ScaleTransition crescer = new ScaleTransition(Duration.millis(DuracaoMS),insignia);
-        crescer.setToX(FatorEscala);
-        crescer.setToY(FatorEscala);
-        ScaleTransition diminuir = new ScaleTransition(Duration.millis(DuracaoMS),insignia);
-        diminuir.setToX(1.0);
-        diminuir.setToY(1.0);
-
-        insignia.setOnMouseEntered(e->{
-            diminuir.stop();
-            crescer.playFromStart();
-        });
-        insignia.setOnMouseExited(e->{
-            crescer.stop();
-            diminuir.playFromStart();
-        });
-    }
-
-    public static void configInsi(ImageView insignia){
-        insignia.setScaleX(1.0);
-        insignia.setScaleY(1.0);
-        insignia.setStyle(insiStyle);
-    }
     public Image imgInsiRock(){
         Insignia brockBadge = new Insignia(1,"Insígnia de Pedra","Pedra","Brock");
-        Image imgRockBadge = new Image(getClass().getResourceAsStream("/srcPokearena/insignias/BrockBadge.png"));
+        Image imgRockBadge = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/insignias/BrockBadge.png")));
         brockBadge.setInsigniaImage(imgRockBadge);
         brockBadge.fazerDescricaoInsignia();
         InsiList.add(brockBadge);
@@ -70,7 +37,7 @@ public class TelaInsignias {
     }
     public Image imgInsiWater(){
         Insignia mistyBadge = new Insignia(2,"Insígnia de Água","Água","Misty");
-        Image imgWaterBadge = new Image(getClass().getResourceAsStream("/srcPokearena/insignias/MistyBadge.png"));
+        Image imgWaterBadge = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/insignias/MistyBadge.png")));
         mistyBadge.setInsigniaImage(imgWaterBadge);
         mistyBadge.fazerDescricaoInsignia();
         InsiList.add(mistyBadge);
@@ -78,30 +45,31 @@ public class TelaInsignias {
     }
     public Image imgInsiAsh(){
         Insignia ashBadge = new Insignia(3,"Boné do Ash","","Ash");
-        Image imgAshBadge = new Image(getClass().getResourceAsStream("/srcPokearena/insignias/AshCap.png"));
+        Image imgAshBadge = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/insignias/AshCap.png")));
         ashBadge.setInsigniaImage(imgAshBadge);
         ashBadge.fazerDescricaoInsigniaAsh();
         InsiList.add(ashBadge);
         return imgAshBadge;
     }
-    public void configImageView(ImageView iv){
-        iv.setFitWidth(800);
-        iv.setFitHeight(180);
+    public void putBtnVoltarImg(Button btn){
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnVoltar.png")));
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(500);
+        iv.setFitHeight(120);
         iv.setPreserveRatio(true);
-    }
-    public static TranslateTransition criarAnimacaoPosicao(ImageView insignia, double yTarget) {
-        javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.millis(DuracaoMS), insignia);
-        tt.setToY(yTarget);
-        return tt;
+        btn.setGraphic(iv);
     }
 
     public BorderPane criarRootTelaInsignias(){
+        ScreenService InsiService = new ScreenService();
         ImageView RockInsi = new ImageView(imgInsiRock());
         ImageView WaterInsi = new ImageView(imgInsiWater());
         ImageView AshCap = new ImageView(imgInsiAsh());
-        configImageView(RockInsi);
-        configImageView(WaterInsi);
-        configImageView(AshCap);
+        Button btnVoltar = new Button();
+        putBtnVoltarImg(btnVoltar);
+        InsiService.configImageView(RockInsi);
+        InsiService.configImageView(WaterInsi);
+        InsiService.configImageView(AshCap);
 
         Insignia rockBadge = InsiList.get(0);
         Insignia waterBadge = InsiList.get(1);
@@ -114,15 +82,12 @@ public class TelaInsignias {
         Label descricaoInsi = new Label("");
         descricaoInsi.setStyle("-fx-font-size: 26px; -fx-text-fill: white; -fx-font-weight: bold;");
 
-        configInsi(RockInsi);
-        configInsi(WaterInsi);
-        configInsi(AshCap);
-        RockInsi.setStyle(insiStyle);
-        WaterInsi.setStyle(insiStyle);
-        AshCap.setStyle(insiStyle);
-        animacaoHover(RockInsi);
-        animacaoHover(WaterInsi);
-        animacaoHover(AshCap);
+        InsiService.configInsi(RockInsi);
+        InsiService.configInsi(WaterInsi);
+        InsiService.configInsi(AshCap);
+        InsiService.animacaoHover(RockInsi);
+        InsiService.animacaoHover(WaterInsi);
+        InsiService.animacaoHover(AshCap);
 
         HBox descricaoBox = new HBox();
         descricaoBox.setAlignment(Pos.CENTER);
@@ -146,35 +111,35 @@ public class TelaInsignias {
             Insignia insi = (Insignia) RockInsi.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
-            criarAnimacaoPosicao(RockInsi,DistanciaSubir).play();
+            InsiService.criarAnimacaoPosicao(RockInsi,DistanciaSubir).play();
         });
         RockInsi.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
             RockInsi.setTranslateY(PosicaoOrigem);
-            criarAnimacaoPosicao(RockInsi,PosicaoOrigem).play();
+            InsiService.criarAnimacaoPosicao(RockInsi,PosicaoOrigem).play();
         });
         WaterInsi.setOnMouseEntered(e->{
             Insignia insi = (Insignia) WaterInsi.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
-            criarAnimacaoPosicao(WaterInsi,DistanciaSubir).play();
+            InsiService.criarAnimacaoPosicao(WaterInsi,DistanciaSubir).play();
         });
         WaterInsi.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
-            criarAnimacaoPosicao(WaterInsi,PosicaoOrigem).play();
+            InsiService.criarAnimacaoPosicao(WaterInsi,PosicaoOrigem).play();
         });
         AshCap.setOnMouseEntered(e->{
             Insignia insi = (Insignia) AshCap.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
-            criarAnimacaoPosicao(AshCap,DistanciaSubir).play();
+            InsiService.criarAnimacaoPosicao(AshCap,DistanciaSubir).play();
         });
         AshCap.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
-            criarAnimacaoPosicao(AshCap,PosicaoOrigem).play();
+            InsiService.criarAnimacaoPosicao(AshCap,PosicaoOrigem).play();
         });
         return root;
     }

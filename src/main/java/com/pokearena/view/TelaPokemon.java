@@ -2,6 +2,7 @@ package com.pokearena.view;
 
 import com.pokearena.model.Pokemon;
 import com.pokearena.service.PokemonFactory;
+import com.pokearena.service.ScreenService;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,13 +16,10 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TelaPokemon {
-    private static final double FatorEscala = 1.1;
-    private static final int DuracaoMS = 150;
     private static final int MAX_SELECIONADOS = 3;
-    private static final String btnStyle = "-fx-padding: 0; -fx-background-color: transparent;";
-
     private List<Pokemon> pokemonsSelecionados;
     private Label labelContador;
     private Runnable onProsseguirAction;
@@ -30,30 +28,6 @@ public class TelaPokemon {
                                                    "-fx-background-size: cover; " +
                                                    "-fx-background-position: center center; " +
                                                    "-fx-background-repeat: no-repeat;";
-
-    public static void animacaoHover(Button botao){
-        ScaleTransition crescer = new ScaleTransition(Duration.millis(DuracaoMS), botao);
-        crescer.setToX(FatorEscala);
-        crescer.setToY(FatorEscala);
-        ScaleTransition diminuir = new ScaleTransition(Duration.millis(DuracaoMS), botao);
-        diminuir.setToX(1.0);
-        diminuir.setToY(1.0);
-
-        botao.setOnMouseEntered(e -> {
-            diminuir.stop();
-            crescer.playFromStart();
-        });
-        botao.setOnMouseExited(e -> {
-            crescer.stop();
-            diminuir.playFromStart();
-        });
-    }
-
-    public static void configBtn(Button btn){
-        btn.setScaleX(1.0);
-        btn.setScaleY(1.0);
-        btn.setStyle(btnStyle);
-    }
 
     public void putPokemonImg(Button btn, int pokemonId, String pokemonNome, boolean selecionado){
         String sufixo = selecionado ? "Red" : "";
@@ -74,8 +48,8 @@ public class TelaPokemon {
 
     public BorderPane criarRootPokemon(Stage stage){
         pokemonsSelecionados = new ArrayList<>();
-
-        Image selectPokemon = new Image(getClass().getResourceAsStream("/srcPokearena/selecaoPokemons/nrRestantesPokemons/restantes3.png"));
+        ScreenService PokeService = new ScreenService();
+        Image selectPokemon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/selecaoPokemons/nrRestantesPokemons/restantes3.png")));
         ImageView iv = new ImageView(selectPokemon);
         iv.setFitWidth(800);
         iv.setFitHeight(180);
@@ -93,9 +67,9 @@ public class TelaPokemon {
         for (int i = 0; i < pokemonIds.length; i++) {
             Button btnPokemon = new Button();
             btnPokemon.setId("pokemon_" + pokemonIds[i]);
-            configBtn(btnPokemon);
+            PokeService.configBtn(btnPokemon);
             putPokemonImg(btnPokemon, pokemonIds[i], pokemonNomes[i], false);
-            animacaoHover(btnPokemon);
+            PokeService.animacaoHover(btnPokemon);
 
             final int index = i; // pra usar dentro do listener
             btnPokemon.setOnAction(e -> selecionarPokemon(btnPokemon, pokemonIds[index], pokemonNomes[index]));

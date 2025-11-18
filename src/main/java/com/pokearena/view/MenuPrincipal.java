@@ -2,6 +2,7 @@ package com.pokearena.view;
 
 import com.pokearena.model.Pokemon;
 import com.pokearena.repository.BancoDeDados;
+import com.pokearena.service.ScreenService;
 import javafx.animation.ScaleTransition;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -17,39 +18,13 @@ import javafx.util.Duration;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Objects;
 
 public class MenuPrincipal extends Application {
 
-    private static final double FatorEscala = 1.1;
-    private static final int DuracaoMS = 150;
-    private static final String btnStyle = "-fx-padding: 0; -fx-background-color: transparent;" +
-                                           "-fx-min-width: 200px; -fx-min-height: 100px;";
     public MenuPrincipal(){}
-    public static void animacaoHover(Button botao){
-        ScaleTransition crescer = new ScaleTransition(Duration.millis(DuracaoMS),botao);
-        crescer.setToX(FatorEscala);
-        crescer.setToY(FatorEscala);
-        ScaleTransition diminuir = new ScaleTransition(Duration.millis(DuracaoMS),botao);
-        diminuir.setToX(1.0);
-        diminuir.setToY(1.0);
-
-        botao.setOnMouseEntered(e->{
-            diminuir.stop();
-            crescer.playFromStart();
-        });
-        botao.setOnMouseExited(e->{
-            crescer.stop();
-            diminuir.playFromStart();
-        });
-    }
-
-    public static void configBtn(Button btn){
-        btn.setScaleX(1.0);
-        btn.setScaleY(1.0);
-        btn.setStyle(btnStyle);
-    }
     public void putBtnIniciarImg(Button btn){
-        Image image = new Image(getClass().getResourceAsStream("/srcPokeArena/botoes/btnIniciar.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokeArena/botoes/btnIniciar.png")));
         ImageView iv = new ImageView(image);
         iv.setFitWidth(500);
         iv.setFitHeight(120);
@@ -57,7 +32,7 @@ public class MenuPrincipal extends Application {
         btn.setGraphic(iv);
     }
     public void putBtnInsiImg(Button btn){
-        Image image = new Image(getClass().getResourceAsStream("/srcPokeArena/botoes/btnInsignias.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokeArena/botoes/btnInsignias.png")));
         ImageView iv = new ImageView(image);
         iv.setFitWidth(500);
         iv.setFitHeight(120);
@@ -70,27 +45,23 @@ public class MenuPrincipal extends Application {
                                            "-fx-background-position: center center; " +
                                            "-fx-background-repeat: no-repeat;";
 
-    public void changeScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
-        Scene newScene = new Scene(root,currentWidth,currentHeight);
-        stage.setScene(newScene);
-    }
-
     @Override
     public void start(Stage stage){
+        ScreenService MenuService = new ScreenService();
         Button btnIniciarJogo = new Button("");
         Button btnInsignias = new Button("");
-        Image logo = new Image(getClass().getResourceAsStream("/srcPokearena/logoPokearena.png"));
+        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/logoPokearena.png")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(800);
         logoView.setFitHeight(180);
         logoView.setPreserveRatio(true);
 
-        configBtn(btnIniciarJogo);
-        configBtn(btnInsignias);
+        MenuService.configBtn(btnIniciarJogo);
+        MenuService.configBtn(btnInsignias);
         putBtnIniciarImg(btnIniciarJogo);
         putBtnInsiImg(btnInsignias);
-        animacaoHover(btnIniciarJogo);
-        animacaoHover(btnInsignias);
+        MenuService.animacaoHover(btnIniciarJogo);
+        MenuService.animacaoHover(btnInsignias);
 
         VBox root = new VBox();
         root.setStyle(backgroundStyle);
@@ -119,19 +90,19 @@ public class MenuPrincipal extends Application {
         btnInsignias.setOnAction(e->{
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            changeScene(stage,infoInsigniasRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,infoInsigniasRoot,currentWidth,currentHeight);
         });
         
         btnIniciarJogo.setOnAction(e->{
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            changeScene(stage,selectPokemonRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,selectPokemonRoot,currentWidth,currentHeight);
         });
         
         telaPokemon.setOnProsseguirAction(() -> {
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            changeScene(stage,selectTrainerRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,selectTrainerRoot,currentWidth,currentHeight);
         });
         Node cardTrainer1 = selectTrainerRoot.lookup("#cardTrainer1");
         Node cardTrainer2 = selectTrainerRoot.lookup("#cardTrainer2");
@@ -142,15 +113,16 @@ public class MenuPrincipal extends Application {
             double currentHeight = stage.getHeight();
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
             BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
-            changeScene(stage,battle1,currentWidth,currentHeight);
+            MenuService.changeScene(stage,battle1,currentWidth,currentHeight);
         });
         cardTrainer2.setOnMouseClicked(e->{
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
             BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
-            changeScene(stage,battle1,currentWidth,currentHeight);
+            MenuService.changeScene(stage,battle1,currentWidth,currentHeight);
         });
+
     }
 
     public static void exibirPokemons() {
