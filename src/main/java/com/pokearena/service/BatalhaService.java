@@ -44,7 +44,7 @@ public class BatalhaService {
                 original.getTipo(),
                 original.getSprite()
             );
-            copia.setHp(original.getHp());
+            copia.setHp(100);
             copias.add(copia);
         }
         return copias;
@@ -91,6 +91,9 @@ public class BatalhaService {
     }
 
     private void inicializarHPs() {
+        for (Pokemon pokemon : pokemonsJogador) {
+            pokemon.setHp(100);
+        }
         for (Pokemon pokemon : pokemonsMaquina) {
             pokemon.setHp(100);
         }
@@ -170,33 +173,31 @@ public class BatalhaService {
         return mensagem;
     }
 
-    public boolean jogadorTrocaPokemon(int indice) {
+    public String jogadorTrocaPokemon(int indice) {
         if (batalhaTerminada || jogoTerminado) {
-            return false;
+            return null;
         }
 
         if (indice < 0 || indice >= pokemonsJogador.size()) {
-            return false;
+            return null;
         }
 
         Pokemon novoPokemon = pokemonsJogador.get(indice);
         
         if (!novoPokemon.estaVivo()) {
-            return false;
+            return null;
         }
 
         if (indice == indicePokemonAtualJogador) {
-            return false;
+            return null;
         }
 
         this.indicePokemonAtualJogador = indice;
         this.pokemonAtualJogador = novoPokemon;
         
-        if (!batalhaTerminada && pokemonAtualMaquina.estaVivo()) {
-            maquinaAtaca();
-        }
+        String mensagem = "Você trocou para " + pokemonAtualJogador.getNome() + "!";
         
-        return true;
+        return mensagem;
     }
 
     private void trocarPokemonMaquina() {
@@ -267,4 +268,15 @@ public class BatalhaService {
         }
         return vivos;
     }
+
+    public List<Pokemon> getPokemonsDisponiveisParaTroca() {
+        List<Pokemon> disponiveis = new ArrayList<>();
+        for (int i = 0; i < pokemonsJogador.size(); i++) {
+            if (i != indicePokemonAtualJogador && pokemonsJogador.get(i).estaVivo()) {
+                disponiveis.add(pokemonsJogador.get(i));
+            }
+        }
+        return disponiveis;
+    }
+
 }

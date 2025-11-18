@@ -139,16 +139,19 @@ public class MenuPrincipal extends Application {
         Node cardTrainer1 = selectTrainerRoot.lookup("#cardTrainer1");
         Node cardTrainer2 = selectTrainerRoot.lookup("#cardTrainer2");
         TelaBatalha screenBattle = new TelaBatalha();
+        screenBattle.setStage(stage);
         cardTrainer1.setOnMouseClicked(e-> {
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            BorderPane battle1 = screenBattle.criarSceneBatalha(1,1);
+            List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
+            BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
             changeScene(stage,battle1,currentWidth,currentHeight);
         });
         cardTrainer2.setOnMouseClicked(e->{
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
-            BorderPane battle1 = screenBattle.criarSceneBatalha(1,2);
+            List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
+            BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
             changeScene(stage,battle1,currentWidth,currentHeight);
         });
     }
