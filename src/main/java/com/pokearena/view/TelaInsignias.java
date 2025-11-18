@@ -3,6 +3,7 @@ import com.pokearena.model.Insignia;
 import com.pokearena.model.Pokemon;
 import com.pokearena.repository.BancoDeDados;
 import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 public class TelaInsignias {
     private static final double FatorEscala = 1.1;
     private static final int DuracaoMS = 150;
+    final double DistanciaSubir = -50.0; // Sobe 50 pixels (valor negativo)
+    final double PosicaoOrigem = 0.0;
     private static final String insiStyle = "-fx-padding: 0; -fx-background-color: transparent;";
     private static final String infoStyle = "-fx-background-color: rgba(0, 0, 0, 0.7); " +
                                             "-fx-border-color: white; " +
@@ -86,6 +89,11 @@ public class TelaInsignias {
         iv.setFitHeight(180);
         iv.setPreserveRatio(true);
     }
+    public static TranslateTransition criarAnimacaoPosicao(ImageView insignia, double yTarget) {
+        javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.millis(DuracaoMS), insignia);
+        tt.setToY(yTarget);
+        return tt;
+    }
 
     public BorderPane criarRootTelaInsignias(){
         ImageView RockInsi = new ImageView(imgInsiRock());
@@ -129,39 +137,45 @@ public class TelaInsignias {
 
 
         BorderPane root = new BorderPane();
-        root.setCenter(insigniasBox);
+        root.setTop(insigniasBox);
         root.setStyle(WallpaperTelaInsignias);
         BorderPane.setMargin(descricaoBox,new Insets(0,30,60,30));
+        BorderPane.setMargin(insigniasBox,new Insets(400,0,0,0));
 
         RockInsi.setOnMouseEntered(e->{
             Insignia insi = (Insignia) RockInsi.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
+            criarAnimacaoPosicao(RockInsi,DistanciaSubir).play();
         });
         RockInsi.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
+            RockInsi.setTranslateY(PosicaoOrigem);
+            criarAnimacaoPosicao(RockInsi,PosicaoOrigem).play();
         });
         WaterInsi.setOnMouseEntered(e->{
             Insignia insi = (Insignia) WaterInsi.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
+            criarAnimacaoPosicao(WaterInsi,DistanciaSubir).play();
         });
         WaterInsi.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
+            criarAnimacaoPosicao(WaterInsi,PosicaoOrigem).play();
         });
         AshCap.setOnMouseEntered(e->{
             Insignia insi = (Insignia) AshCap.getUserData();
             descricaoInsi.setText(insi.getDescricao());
             root.setBottom(descricaoBox);
+            criarAnimacaoPosicao(AshCap,DistanciaSubir).play();
         });
         AshCap.setOnMouseExited(e->{
             descricaoInsi.setText("");
             root.setBottom(null);
+            criarAnimacaoPosicao(AshCap,PosicaoOrigem).play();
         });
-
-
         return root;
     }
 
