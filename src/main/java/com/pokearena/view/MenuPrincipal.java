@@ -4,10 +4,13 @@ import com.pokearena.model.Pokemon;
 import com.pokearena.repository.BancoDeDados;
 import com.pokearena.service.ScreenService;
 import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -114,20 +117,27 @@ public class MenuPrincipal extends Application {
         Node cardTrainer1 = selectTrainerScene.lookup("#cardTrainer1");
         Node cardTrainer2 = selectTrainerScene.lookup("#cardTrainer2");
         TelaBatalha screenBattle = new TelaBatalha();
-        screenBattle.setStage(stage);
         cardTrainer1.setOnMouseClicked(e-> {
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
-            MenuService.changeScene(stage,battle1,currentWidth,currentHeight);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage);
+            MenuService.changeScene(stage,battle1);
+            Node mensagemInicial = battle1.lookup("#mensagemInicial");
+            Label AppearMsg = (Label) mensagemInicial;
+            Platform.runLater(()->{
+                SequentialTransition animarLabels = MenuService.animarLabels(AppearMsg,MenuService.offScreenDistance + AppearMsg.getWidth(),MenuService.offScreenDistance + AppearMsg.getWidth());
+                animarLabels.play();
+            });
         });
         cardTrainer2.setOnMouseClicked(e->{
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            BorderPane battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados);
-            MenuService.changeScene(stage,battle1,currentWidth,currentHeight);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage);
+            MenuService.changeScene(stage,battle1);
+            Node mensagemInicial = battle1.lookup("#mensagemInicial");
+            Label AppearMsg = (Label) mensagemInicial;
+            Platform.runLater(()->{
+                SequentialTransition animarLabels = MenuService.animarLabels(AppearMsg,MenuService.offScreenDistance + AppearMsg.getWidth(),MenuService.offScreenDistance + AppearMsg.getWidth());
+                animarLabels.play();
+            });
         });
 
     }

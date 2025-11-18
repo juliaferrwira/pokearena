@@ -1,9 +1,13 @@
 package com.pokearena.service;
 
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.TranslateTransition;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -19,7 +23,7 @@ public class ScreenService {
     Dimension screenSize = toolkit.getScreenSize();
     public int screenWidth = screenSize.width;
     public int screenHeight = screenSize.height;
-
+    public final double offScreenDistance = ((double) screenWidth /2);
 
     //Insignias Service
     private static final String insiStyle = "-fx-padding: 0; -fx-background-color: transparent;";
@@ -87,7 +91,20 @@ public class ScreenService {
         btn.setStyle(btnStyle);
     }
 
-    // Função pra trocar as telas
+    public SequentialTransition animarLabels(Label label, double offScreenLeft, double offScreenRight){
+        TranslateTransition entrar = new TranslateTransition(Duration.seconds(1.0),label);
+        entrar.setFromX(-offScreenLeft);
+        entrar.setToX(0);
+
+        PauseTransition pausa = new PauseTransition(Duration.seconds(2.0));
+
+        TranslateTransition sair = new TranslateTransition(Duration.seconds(1.0),label);
+        sair.setToX(offScreenRight);
+
+        return new SequentialTransition(entrar,pausa,sair);
+    }
+
+    // Funções pra trocar as telas
     public void changeScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
         Scene newScene = new Scene(root,currentWidth,currentHeight);
         stage.setScene(newScene);
@@ -96,5 +113,6 @@ public class ScreenService {
         stage.setMaximized(true);
         stage.setScene(scene);
     }
+
     public ScreenService(){}
 }
