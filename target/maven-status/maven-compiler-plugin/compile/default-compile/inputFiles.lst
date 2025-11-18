@@ -1,18 +1,18 @@
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Batalha.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\exceptions\ErroPokemonNaoEncontrado.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\service\BatalhaService.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Personagem.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Pokemon.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\repository\BancoDeDados.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\TelaBatalha.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\service\PokeApiService.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Liga.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\TelaTreinador.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\TelaInsignias.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\LigaKanto.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\repository\PokemonRepository.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\MenuPrincipal.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Treinador.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\TelaPokemon.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Insignia.java
-C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\service\PokemonFactory.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Treinador.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\exceptions\ErroPokemonNaoEncontrado.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Pokemon.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\service\PokeApiService.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\view\TelaBatalha.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\view\TelaTreinador.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Insignia.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\repository\BancoDeDados.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Batalha.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\view\TelaInsignias.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\service\BatalhaService.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Personagem.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\Liga.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\model\LigaKanto.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\service\PokemonFactory.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\view\MenuPrincipal.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\repository\PokemonRepository.java
+C:\Users\icaro\IdeaProjects\pokearena\src\main\java\com\pokearena\view\TelaPokemon.java

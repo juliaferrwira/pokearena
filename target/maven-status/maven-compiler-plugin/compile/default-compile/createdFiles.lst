@@ -1,7 +1,9 @@
 com\pokearena\view\TelaPokemon.class
 com\pokearena\exceptions\ErroPokemonNaoEncontrado.class
+com\pokearena\service\BatalhaService.class
 com\pokearena\model\Pokemon.class
 com\pokearena\view\TelaTreinador.class
+com\pokearena\service\PokemonFactory.class
 com\pokearena\model\Treinador.class
 com\pokearena\model\Personagem.class
 com\pokearena\model\LigaKanto.class
