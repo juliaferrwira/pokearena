@@ -119,9 +119,19 @@ public class MenuPrincipal extends Application {
         stage.setMaximized(true);
         stage.show();
 
+        TelaPokemon telaPokemon = new TelaPokemon();
+        BorderPane selectPokemonRoot = telaPokemon.criarRootPokemon(stage);
+        
         TelaTreinador TelaTreinador = new TelaTreinador();
         BorderPane selectTrainerRoot = TelaTreinador.criarRootTreinador();
+        
         btnIniciarJogo.setOnAction(e->{
+            double currentWidth = stage.getWidth();
+            double currentHeight = stage.getHeight();
+            changeScene(stage,selectPokemonRoot,currentWidth,currentHeight);
+        });
+        
+        telaPokemon.setOnProsseguirAction(() -> {
             double currentWidth = stage.getWidth();
             double currentHeight = stage.getHeight();
             changeScene(stage,selectTrainerRoot,currentWidth,currentHeight);
