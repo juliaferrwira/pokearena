@@ -14,7 +14,6 @@ public class Insignia {
         this.nome = nome;
         this.ginasio = ginasio;
         this.atualDetentor = atualDetentor;
-        this.insigniaImage = new Image("");
     }
 
     public int getId() {
@@ -23,6 +22,10 @@ public class Insignia {
 
     public String getNome() {
         return nome;
+    }
+
+    public Image getInsigniaImage() {
+        return insigniaImage;
     }
 
     public String getGinasio() {
@@ -57,9 +60,17 @@ public class Insignia {
         this.descricao = descricao;
     }
 
-    public void fazerDescricaoInsignia(String nome, String ginasio, String atualDetentor){
-        this.descricao = "A "+nome+", concedida pelo Ginásio de "+ginasio+"após vencer o líder "+atualDetentor+","+
-                " é mais que um troféu: é a prova de superação e orgulho para todo treinador que busca se tornar o melhor";
+    public void setInsigniaImage(Image insigniaImage) {
+        this.insigniaImage = insigniaImage;
+    }
+
+    public void fazerDescricaoInsignia(){
+        this.descricao = "A "+this.nome+", concedida pelo Ginásio de "+this.ginasio+" após vencer o líder "+this.atualDetentor+","+
+                "é mais que um troféu:\n                é a prova de superação e orgulho para todo treinador que busca se tornar o melhor";
+    }
+    public void fazerDescricaoInsigniaAsh(){
+        this.descricao = "          O "+this.nome+", concedido após vencer o líder "+this.atualDetentor+","+
+                " é mais que um troféu:\n é a prova de superação e orgulho para todo treinador que busca se tornar o melhor";
     }
 
     public void mudarAtualDetentor(String novoDetentor,Insignia I){
