@@ -83,26 +83,31 @@ public class MenuPrincipal extends Application {
 
         TelaPokemon telaPokemon = new TelaPokemon();
         Scene selectPokemonScene = telaPokemon.criarScenePokemon();
-        
+        Node nodePokeVoltar = selectPokemonScene.lookup("#PokeVoltar");
+
         TelaTreinador TelaTreinador = new TelaTreinador();
         Scene selectTrainerScene = TelaTreinador.criarSceneTreinador();
+        Node nodeTrainerVoltar = selectTrainerScene.lookup("#TrainerVoltar");
 
         TelaInsignias TelaInsignias = new TelaInsignias();
         Scene infoInsigniasScene = TelaInsignias.criarSceneInsignias();
         Node nodeInsiVoltar = infoInsigniasScene.lookup("#InsiVoltar");
 
+        nodeTrainerVoltar.setOnMouseClicked(e->{
+            MenuService.changeScene(stage,selectPokemonScene);
+        });
         nodeInsiVoltar.setOnMouseClicked(e->{
             MenuService.changeScene(stage,scene);
         });
-
+        nodePokeVoltar.setOnMouseClicked(e->{
+            MenuService.changeScene(stage,scene);
+        });
         btnInsignias.setOnAction(e->{
             MenuService.changeScene(stage,infoInsigniasScene);
         });
-        
         btnIniciarJogo.setOnAction(e->{
             MenuService.changeScene(stage,selectPokemonScene);
         });
-        
         telaPokemon.setOnProsseguirAction(() -> {
             MenuService.changeScene(stage,selectTrainerScene);
         });

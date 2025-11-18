@@ -32,6 +32,14 @@ public class TelaTreinador {
         iv.setPreserveRatio(true);
         btn.setGraphic(iv);
     }
+    public void putBtnVoltarImg(Button btn){
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnVoltar.png")));
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(500);
+        iv.setFitHeight(120);
+        iv.setPreserveRatio(true);
+        btn.setGraphic(iv);
+    }
 
     public Scene criarSceneTreinador(){
         ScreenService TrainerService = new ScreenService();
@@ -41,26 +49,34 @@ public class TelaTreinador {
         iv.setFitHeight(180);
         iv.setPreserveRatio(true);
 
+        Button btnVoltar = new Button();
+        btnVoltar.setId("TrainerVoltar");
         Button cardTrainer1 = new Button();
         cardTrainer1.setId("cardTrainer1");
         Button cardTrainer2 = new Button();
         cardTrainer2.setId("cardTrainer2");
 
+        TrainerService.configBtn(btnVoltar);
         TrainerService.configBtn(cardTrainer1);
         TrainerService.configBtn(cardTrainer2);
+        putBtnVoltarImg(btnVoltar);
         putCard1Img(cardTrainer1);
         putCard2Img(cardTrainer2);
         TrainerService.animacaoHover(cardTrainer1);
         TrainerService.animacaoHover(cardTrainer2);
+        TrainerService.animacaoHover(btnVoltar);
 
         HBox selectTrainerBox = new HBox(50);
         selectTrainerBox.getChildren().addAll(cardTrainer1,cardTrainer2);
         selectTrainerBox.setAlignment(Pos.CENTER);
 
+        HBox topBox = new HBox(btnVoltar,iv);
+        topBox.setSpacing(420);
+
         BorderPane root = new BorderPane();
-        root.setTop(iv);
-        BorderPane.setAlignment(iv,Pos.CENTER);
-        BorderPane.setMargin(iv,new Insets(10,15,15,15));
+        root.setTop(topBox);
+        BorderPane.setAlignment(topBox,Pos.CENTER);
+        BorderPane.setMargin(topBox,new Insets(10,15,0,15));
         root.setCenter(selectTrainerBox);
         root.setStyle(WallpaperSelectTrainer);
 

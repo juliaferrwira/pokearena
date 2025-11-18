@@ -46,6 +46,14 @@ public class TelaPokemon {
         iv.setPreserveRatio(true);
         btn.setGraphic(iv);
     }
+    public void putBtnVoltarImg(Button btn){
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnVoltar.png")));
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(500);
+        iv.setFitHeight(120);
+        iv.setPreserveRatio(true);
+        btn.setGraphic(iv);
+    }
 
     public Scene criarScenePokemon(){
         pokemonsSelecionados = new ArrayList<>();
@@ -55,6 +63,11 @@ public class TelaPokemon {
         iv.setFitWidth(800);
         iv.setFitHeight(180);
         iv.setPreserveRatio(true);
+        Button btnVoltar = new Button();
+        btnVoltar.setId("PokeVoltar");
+        putBtnVoltarImg(btnVoltar);
+        PokeService.configBtn(btnVoltar);
+        PokeService.animacaoHover(btnVoltar);
 
         int[] pokemonIds = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         String[] pokemonNomes = {"bulbasaur", "charmander", "squirtle", "pikachu",
@@ -86,10 +99,13 @@ public class TelaPokemon {
         centerBox.getChildren().addAll(gridPokemons, labelContador);
         centerBox.setPadding(new Insets(20));
 
+        HBox topBox = new HBox(btnVoltar,iv);
+        topBox.setSpacing(440);
+
         BorderPane root = new BorderPane();
-        root.setTop(iv);
-        BorderPane.setAlignment(iv, Pos.CENTER);
-        BorderPane.setMargin(iv, new Insets(10, 15, 15, 15));
+        root.setTop(topBox);
+        BorderPane.setAlignment(topBox, Pos.CENTER);
+        BorderPane.setMargin(topBox, new Insets(10, 15, 0, 15));
         root.setCenter(centerBox);
         root.setStyle(WallpaperSelectPokemon);
 
@@ -107,7 +123,6 @@ public class TelaPokemon {
                 break;
             }
         }
-
         if (jaSelecionado) {
             pokemonsSelecionados.remove(posicaoRemover);
             putPokemonImg(btn, pokemonId, pokemonNome, false);
@@ -121,10 +136,8 @@ public class TelaPokemon {
                 putPokemonImg(btn, pokemonId, pokemonNome, true);
             }
         }
-
         atualizarContador();
     }
-
     private void atualizarContador(){
         int selecionados = pokemonsSelecionados.size();
         labelContador.setText("Selecione 3 pokémons (" + selecionados + "/3)");
