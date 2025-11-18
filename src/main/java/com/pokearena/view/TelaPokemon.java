@@ -6,6 +6,7 @@ import com.pokearena.service.ScreenService;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -46,7 +47,7 @@ public class TelaPokemon {
         btn.setGraphic(iv);
     }
 
-    public BorderPane criarRootPokemon(Stage stage){
+    public Scene criarScenePokemon(){
         pokemonsSelecionados = new ArrayList<>();
         ScreenService PokeService = new ScreenService();
         Image selectPokemon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/selecaoPokemons/nrRestantesPokemons/restantes3.png")));
@@ -92,7 +93,7 @@ public class TelaPokemon {
         root.setCenter(centerBox);
         root.setStyle(WallpaperSelectPokemon);
 
-        return root;
+        return new Scene(root,PokeService.screenWidth,PokeService.screenHeight);
     }
 
     private void selecionarPokemon(Button btn, int pokemonId, String pokemonNome){

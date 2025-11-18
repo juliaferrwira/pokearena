@@ -9,10 +9,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.awt.*;
+
 public class ScreenService {
     //Variáveis Gerais
     private static final double FatorEscala = 1.1;
     private static final int DuracaoMS = 150;
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    Dimension screenSize = toolkit.getScreenSize();
+    public int screenWidth = screenSize.width;
+    public int screenHeight = screenSize.height;
 
 
     //Insignias Service
@@ -85,6 +91,10 @@ public class ScreenService {
     public void changeScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
         Scene newScene = new Scene(root,currentWidth,currentHeight);
         stage.setScene(newScene);
+    }
+    public void changeScene(Stage stage,Scene scene){
+        stage.setMaximized(true);
+        stage.setScene(scene);
     }
     public ScreenService(){}
 }

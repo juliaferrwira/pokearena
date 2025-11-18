@@ -1,15 +1,12 @@
 package com.pokearena.view;
 import com.pokearena.service.ScreenService;
-import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
-import javafx.util.Duration;
 
 import java.util.Objects;
 
@@ -36,7 +33,7 @@ public class TelaTreinador {
         btn.setGraphic(iv);
     }
 
-    public BorderPane criarRootTreinador(){
+    public Scene criarSceneTreinador(){
         ScreenService TrainerService = new ScreenService();
         Image selectTrainer = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/selecaoTreinador/selecioneTreinador.png")));
         ImageView iv = new ImageView(selectTrainer);
@@ -67,7 +64,7 @@ public class TelaTreinador {
         root.setCenter(selectTrainerBox);
         root.setStyle(WallpaperSelectTrainer);
 
-        return root;
+        return new Scene(root,TrainerService.screenWidth,TrainerService.screenHeight);
     }
 
     public TelaTreinador(){

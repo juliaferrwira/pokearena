@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
@@ -63,49 +64,50 @@ public class MenuPrincipal extends Application {
         MenuService.animacaoHover(btnIniciarJogo);
         MenuService.animacaoHover(btnInsignias);
 
-        VBox root = new VBox();
-        root.setStyle(backgroundStyle);
-        root.getChildren().add(logoView);
-        root.getChildren().add(btnIniciarJogo);
-        root.getChildren().add(btnInsignias);
-        root.setSpacing(15);
-        root.setAlignment(Pos.CENTER);
+        VBox MenuContainer = new VBox();
+        MenuContainer.getChildren().add(logoView);
+        MenuContainer.getChildren().add(btnIniciarJogo);
+        MenuContainer.getChildren().add(btnInsignias);
+        MenuContainer.setSpacing(15);
+        MenuContainer.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(root,800,600);
+        BorderPane root = new BorderPane();
+        root.setCenter(MenuContainer);
+        root.setStyle(backgroundStyle);
+
+        Scene scene = new Scene(root,MenuService.screenWidth,MenuService.screenHeight);
         stage.setTitle("PokeArena");
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
 
         TelaPokemon telaPokemon = new TelaPokemon();
-        BorderPane selectPokemonRoot = telaPokemon.criarRootPokemon(stage);
+        Scene selectPokemonScene = telaPokemon.criarScenePokemon();
         
         TelaTreinador TelaTreinador = new TelaTreinador();
-        BorderPane selectTrainerRoot = TelaTreinador.criarRootTreinador();
-
+        Scene selectTrainerScene = TelaTreinador.criarSceneTreinador();
 
         TelaInsignias TelaInsignias = new TelaInsignias();
-        BorderPane infoInsigniasRoot = TelaInsignias.criarRootTelaInsignias();
+        Scene infoInsigniasScene = TelaInsignias.criarSceneInsignias();
+        Node nodeInsiVoltar = infoInsigniasScene.lookup("#InsiVoltar");
+
+        nodeInsiVoltar.setOnMouseClicked(e->{
+            MenuService.changeScene(stage,scene);
+        });
 
         btnInsignias.setOnAction(e->{
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-            MenuService.changeScene(stage,infoInsigniasRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,infoInsigniasScene);
         });
         
         btnIniciarJogo.setOnAction(e->{
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-            MenuService.changeScene(stage,selectPokemonRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,selectPokemonScene);
         });
         
         telaPokemon.setOnProsseguirAction(() -> {
-            double currentWidth = stage.getWidth();
-            double currentHeight = stage.getHeight();
-            MenuService.changeScene(stage,selectTrainerRoot,currentWidth,currentHeight);
+            MenuService.changeScene(stage,selectTrainerScene);
         });
-        Node cardTrainer1 = selectTrainerRoot.lookup("#cardTrainer1");
-        Node cardTrainer2 = selectTrainerRoot.lookup("#cardTrainer2");
+        Node cardTrainer1 = selectTrainerScene.lookup("#cardTrainer1");
+        Node cardTrainer2 = selectTrainerScene.lookup("#cardTrainer2");
         TelaBatalha screenBattle = new TelaBatalha();
         screenBattle.setStage(stage);
         cardTrainer1.setOnMouseClicked(e-> {
