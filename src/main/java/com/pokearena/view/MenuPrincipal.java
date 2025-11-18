@@ -64,14 +64,6 @@ public class MenuPrincipal extends Application {
         iv.setPreserveRatio(true);
         btn.setGraphic(iv);
     }
-    public void putBtnPokemonImg(Button btn){
-        Image image = new Image(getClass().getResourceAsStream("/srcPokeArena/botoes/btnPokemon.png"));
-        ImageView iv = new ImageView(image);
-        iv.setFitWidth(500);
-        iv.setFitHeight(120);
-        iv.setPreserveRatio(true);
-        btn.setGraphic(iv);
-    }
 
     public static String backgroundStyle = "-fx-background-image: url('srcPokearena/wallpaper2.jpg'); " +
                                            "-fx-background-size: cover; " +
@@ -87,7 +79,6 @@ public class MenuPrincipal extends Application {
     public void start(Stage stage){
         Button btnIniciarJogo = new Button("");
         Button btnInsignias = new Button("");
-        Button btnPokemon = new Button("");
         Image logo = new Image(getClass().getResourceAsStream("/srcPokearena/logoPokearena.png"));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(800);
@@ -96,20 +87,16 @@ public class MenuPrincipal extends Application {
 
         configBtn(btnIniciarJogo);
         configBtn(btnInsignias);
-        configBtn(btnPokemon);
         putBtnIniciarImg(btnIniciarJogo);
         putBtnInsiImg(btnInsignias);
-        putBtnPokemonImg(btnPokemon);
         animacaoHover(btnIniciarJogo);
         animacaoHover(btnInsignias);
-        animacaoHover(btnPokemon);
 
         VBox root = new VBox();
         root.setStyle(backgroundStyle);
         root.getChildren().add(logoView);
         root.getChildren().add(btnIniciarJogo);
         root.getChildren().add(btnInsignias);
-        root.getChildren().add(btnPokemon);
         root.setSpacing(15);
         root.setAlignment(Pos.CENTER);
 
@@ -124,6 +111,7 @@ public class MenuPrincipal extends Application {
         
         TelaTreinador TelaTreinador = new TelaTreinador();
         BorderPane selectTrainerRoot = TelaTreinador.criarRootTreinador();
+
 
         TelaInsignias TelaInsignias = new TelaInsignias();
         BorderPane infoInsigniasRoot = TelaInsignias.criarRootTelaInsignias();
