@@ -4,6 +4,7 @@ import com.pokearena.repository.BancoDeDados;
 import com.pokearena.service.ScreenService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
@@ -60,16 +61,18 @@ public class TelaInsignias {
         btn.setGraphic(iv);
     }
 
-    public BorderPane criarRootTelaInsignias(){
+    public Scene criarSceneInsignias(){
         ScreenService InsiService = new ScreenService();
         ImageView RockInsi = new ImageView(imgInsiRock());
         ImageView WaterInsi = new ImageView(imgInsiWater());
         ImageView AshCap = new ImageView(imgInsiAsh());
         Button btnVoltar = new Button();
+        btnVoltar.setId("InsiVoltar");
         putBtnVoltarImg(btnVoltar);
         InsiService.configImageView(RockInsi);
         InsiService.configImageView(WaterInsi);
         InsiService.configImageView(AshCap);
+        InsiService.configBtn(btnVoltar);
 
         Insignia rockBadge = InsiList.get(0);
         Insignia waterBadge = InsiList.get(1);
@@ -85,9 +88,7 @@ public class TelaInsignias {
         InsiService.configInsi(RockInsi);
         InsiService.configInsi(WaterInsi);
         InsiService.configInsi(AshCap);
-        InsiService.animacaoHover(RockInsi);
-        InsiService.animacaoHover(WaterInsi);
-        InsiService.animacaoHover(AshCap);
+        InsiService.animacaoHover(btnVoltar);
 
         HBox descricaoBox = new HBox();
         descricaoBox.setAlignment(Pos.CENTER);
@@ -100,12 +101,14 @@ public class TelaInsignias {
         insigniasBox.getChildren().add(WaterInsi);
         insigniasBox.getChildren().add(AshCap);
 
+        VBox InsiContainer = new VBox(btnVoltar,insigniasBox);
+        InsiContainer.setSpacing(250);
+        InsiContainer.getChildren().get(0).setLayoutX(-100);
 
         BorderPane root = new BorderPane();
-        root.setTop(insigniasBox);
+        root.setTop(InsiContainer);
         root.setStyle(WallpaperTelaInsignias);
         BorderPane.setMargin(descricaoBox,new Insets(0,30,60,30));
-        BorderPane.setMargin(insigniasBox,new Insets(400,0,0,0));
 
         RockInsi.setOnMouseEntered(e->{
             Insignia insi = (Insignia) RockInsi.getUserData();
@@ -141,7 +144,8 @@ public class TelaInsignias {
             root.setBottom(null);
             InsiService.criarAnimacaoPosicao(AshCap,PosicaoOrigem).play();
         });
-        return root;
+
+        return new Scene(root,InsiService.screenWidth,InsiService.screenHeight);
     }
 
     public TelaInsignias(){}
