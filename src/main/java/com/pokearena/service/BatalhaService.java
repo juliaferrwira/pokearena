@@ -3,7 +3,6 @@ package com.pokearena.service;
 import com.pokearena.model.Pokemon;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class BatalhaService {
     private List<Pokemon> pokemonsJogador;
@@ -12,15 +11,18 @@ public class BatalhaService {
     private Pokemon pokemonAtualMaquina;
     private int indicePokemonAtualJogador;
     private int indicePokemonAtualMaquina;
-    private Random random;
     private boolean batalhaTerminada;
     private String vencedor;
+    private int numeroBatalha;
+    private String nomeMaquina;
+    private boolean jogoTerminado;
 
-    public BatalhaService(List<Pokemon> pokemonsJogador) {
+    public BatalhaService(List<Pokemon> pokemonsJogador, int numeroBatalha) {
         this.pokemonsJogador = criarCopiasPokemons(pokemonsJogador);
-        this.pokemonsMaquina = gerarPokemonsMaquina();
-        this.random = new Random();
+        this.numeroBatalha = numeroBatalha;
+        this.pokemonsMaquina = criarTimeMaquina(numeroBatalha);
         this.batalhaTerminada = false;
+        this.jogoTerminado = false;
         
         inicializarHPs();
         
@@ -36,51 +38,59 @@ public class BatalhaService {
             Pokemon copia = new Pokemon(
                 original.getId(),
                 original.getNome(),
-                original.getAtaque(),
+                0,
                 0,
                 100,
                 original.getTipo(),
                 original.getSprite()
             );
-            copia.setHp(100);
+            copia.setHp(original.getHp());
             copias.add(copia);
         }
         return copias;
     }
 
-    private List<Pokemon> gerarPokemonsMaquina() {
-        List<Pokemon> todosPokemons = PokemonFactory.criarTodosPokemons();
-        List<Pokemon> pokemonsSelecionados = new ArrayList<>();
-        List<Integer> indicesUsados = new ArrayList<>();
+    private List<Pokemon> criarTimeMaquina(int numeroBatalha) {
+        List<Pokemon> time = new ArrayList<>();
         
-        for (int i = 0; i < 3; i++) {
-            int indice;
-            do {
-                indice = random.nextInt(todosPokemons.size());
-            } while (indicesUsados.contains(indice));
-            
-            indicesUsados.add(indice);
-            Pokemon original = todosPokemons.get(indice);
-            
-            Pokemon copia = new Pokemon(
-                original.getId() + 100,
-                original.getNome() + "_maquina",
-                original.getAtaque(),
-                0,
-                100,
-                original.getTipo(),
-                original.getSprite()
-            );
-            copia.setHp(100);
-            pokemonsSelecionados.add(copia);
+        if (numeroBatalha == 1) {
+            nomeMaquina = "Brock";
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(9)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(7)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(8)));
+        } else if (numeroBatalha == 2) {
+            nomeMaquina = "Misty";
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(3)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(6)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(4)));
+        } else if (numeroBatalha == 3) {
+            nomeMaquina = "Ash";
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(4)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(2)));
+            time.add(criarCopiaPokemon(PokemonFactory.criarPokemonPorId(1)));
         }
-        return pokemonsSelecionados;
+        
+        return time;
+    }
+
+    private Pokemon criarCopiaPokemon(Pokemon original) {
+        if (original == null) {
+            return null;
+        }
+        Pokemon copia = new Pokemon(
+            original.getId() + 100,
+            original.getNome() + "_" + nomeMaquina,
+            0,
+            0,
+            100,
+            original.getTipo(),
+            original.getSprite()
+        );
+        copia.setHp(100);
+        return copia;
     }
 
     private void inicializarHPs() {
-        for (Pokemon pokemon : pokemonsJogador) {
-            pokemon.setHp(100);
-        }
         for (Pokemon pokemon : pokemonsMaquina) {
             pokemon.setHp(100);
         }
@@ -97,7 +107,7 @@ public class BatalhaService {
     }
 
     public String jogadorAtaca() {
-        if (batalhaTerminada) {
+        if (batalhaTerminada || jogoTerminado) {
             return "A batalha já terminou!";
         }
 
@@ -118,11 +128,11 @@ public class BatalhaService {
             
             if (temPokemonVivo(pokemonsMaquina)) {
                 trocarPokemonMaquina();
-                mensagem += "\nA máquina trocou para " + pokemonAtualMaquina.getNome() + "!";
+                mensagem += "\n" + nomeMaquina + " trocou para " + pokemonAtualMaquina.getNome() + "!";
             } else {
                 batalhaTerminada = true;
                 vencedor = "JOGADOR";
-                mensagem += "\nVocê venceu a batalha!";
+                mensagem += "\nVocê venceu " + nomeMaquina + "!";
             }
         }
         
@@ -151,8 +161,9 @@ public class BatalhaService {
             
             if (!temPokemonVivo(pokemonsJogador)) {
                 batalhaTerminada = true;
+                jogoTerminado = true;
                 vencedor = "MAQUINA";
-                mensagem += "\nVocê perdeu a batalha!";
+                mensagem += "\nVocê perdeu para " + nomeMaquina + "! O jogo acabou!";
             }
         }
         
@@ -160,7 +171,7 @@ public class BatalhaService {
     }
 
     public boolean jogadorTrocaPokemon(int indice) {
-        if (batalhaTerminada) {
+        if (batalhaTerminada || jogoTerminado) {
             return false;
         }
 
@@ -227,12 +238,24 @@ public class BatalhaService {
         return batalhaTerminada;
     }
 
+    public boolean isJogoTerminado() {
+        return jogoTerminado;
+    }
+
     public String getVencedor() {
         return vencedor;
     }
 
     public int getIndicePokemonAtualJogador() {
         return indicePokemonAtualJogador;
+    }
+
+    public int getNumeroBatalha() {
+        return numeroBatalha;
+    }
+
+    public String getNomeMaquina() {
+        return nomeMaquina;
     }
 
     public List<Pokemon> getPokemonsVivosJogador() {
