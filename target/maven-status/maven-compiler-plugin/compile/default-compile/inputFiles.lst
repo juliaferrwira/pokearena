@@ -1,5 +1,6 @@
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Batalha.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\exceptions\ErroPokemonNaoEncontrado.java
+C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\service\BatalhaService.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Personagem.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Pokemon.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\repository\BancoDeDados.java
@@ -14,3 +15,4 @@ C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\v
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Treinador.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\view\TelaPokemon.java
 C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\model\Insignia.java
+C:\Users\Julia\Documents\Workspace Julia\pokearena\src\main\java\com\pokearena\service\PokemonFactory.java
