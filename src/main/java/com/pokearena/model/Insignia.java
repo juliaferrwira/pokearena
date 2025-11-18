@@ -1,4 +1,5 @@
 package com.pokearena.model;
+import javafx.scene.image.Image;
 
 public class Insignia {
     private int id;
@@ -6,12 +7,14 @@ public class Insignia {
     private String ginasio;
     private String atualDetentor;
     private String descricao;
+    private Image insigniaImage;
 
     public Insignia(int id,String nome,String ginasio,String atualDetentor) {
         this.id = id;
         this.nome = nome;
         this.ginasio = ginasio;
         this.atualDetentor = atualDetentor;
+        this.insigniaImage = new Image("");
     }
 
     public int getId() {
