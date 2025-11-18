@@ -119,7 +119,8 @@ public class MenuPrincipal extends Application {
         TelaBatalha screenBattle = new TelaBatalha();
         cardTrainer1.setOnMouseClicked(e-> {
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage);
+            Image cardIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconIcaro.png")));
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
             MenuService.changeScene(stage,battle1);
             Node mensagemInicial = battle1.lookup("#mensagemInicial");
             Label AppearMsg = (Label) mensagemInicial;
@@ -130,8 +131,10 @@ public class MenuPrincipal extends Application {
         });
         cardTrainer2.setOnMouseClicked(e->{
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage);
+            Image cardIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconJulia.png")));
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
             MenuService.changeScene(stage,battle1);
+            battle1.getStylesheets().add(MenuService.dataUrl);
             Node mensagemInicial = battle1.lookup("#mensagemInicial");
             Label AppearMsg = (Label) mensagemInicial;
             Platform.runLater(()->{
