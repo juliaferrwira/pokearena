@@ -71,7 +71,7 @@ public class TelaTreinador {
         selectTrainerBox.setAlignment(Pos.CENTER);
 
         HBox topBox = new HBox(btnVoltar,iv);
-        topBox.setSpacing(420);
+        topBox.setSpacing(TrainerService.offScreenDistance - 850);
 
         BorderPane root = new BorderPane();
         root.setTop(topBox);

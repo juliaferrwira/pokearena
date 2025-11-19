@@ -100,7 +100,7 @@ public class TelaPokemon {
         centerBox.setPadding(new Insets(20));
 
         HBox topBox = new HBox(btnVoltar,iv);
-        topBox.setSpacing(440);
+        topBox.setSpacing(PokeService.offScreenDistance - 835);
 
         BorderPane root = new BorderPane();
         root.setTop(topBox);
