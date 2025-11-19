@@ -2,17 +2,16 @@ package com.pokearena.view;
 import com.pokearena.model.Pokemon;
 import com.pokearena.service.BatalhaService;
 import com.pokearena.service.ScreenService;
-import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
@@ -27,24 +26,26 @@ public class TelaBatalha {
             "-fx-background-radius: 15px;";
 
     private static final String labelStyle = "-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;";
-    private static final String mensagemStyle = "-fx-font-size: 48px; -fx-text-fill: yellow; -fx-font-weight: bold;";
+    private static final String mensagemStyle = "-fx-font-size: 14px; -fx-text-fill: yellow; -fx-font-weight: bold;";
     private final ScreenService battleScreenService = new ScreenService();
     private Stage stage;
     private Image PlayerCard;
 
+    private Pokemon pokemonJogador;
+    private Pokemon pokemonMaquina;
+
+    private ProgressBar hpJogadorBar;
+    private ProgressBar hpMaquinaBar;
+
     private BatalhaService batalhaService;
     private Label labelMensagem;
-    private Label labelHpJogador;
-    private Label labelHpMaquina;
-    private Label labelPokemonJogador;
-    private Label labelPokemonMaquina;
     private BorderPane root;
     private VBox trocaPokemonBox;
     private Runnable onVoltarAction;
     private List<Pokemon> pokemonsJogador;
 
     public void putBtnAtacarImg(Button btn){
-        Image image = new Image(getClass().getResourceAsStream("/srcPokearena/botoes/btnAtacar.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnAtacar.png")));
         ImageView iv = new ImageView(image);
         iv.setFitWidth(500);
         iv.setFitHeight(120);
@@ -53,7 +54,16 @@ public class TelaBatalha {
     }
 
     public void putBtnPokemonImg(Button btn){
-        Image image = new Image(getClass().getResourceAsStream("/srcPokeArena/botoes/btnPokemon.png"));
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokeArena/botoes/btnPokemon.png")));
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(500);
+        iv.setFitHeight(120);
+        iv.setPreserveRatio(true);
+        btn.setGraphic(iv);
+    }
+
+    public void putBtnVoltarImg(Button btn){
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnVoltar.png")));
         ImageView iv = new ImageView(image);
         iv.setFitWidth(500);
         iv.setFitHeight(120);
@@ -62,16 +72,16 @@ public class TelaBatalha {
     }
 
     public static String WallpaperBattle1 = "-fx-background-image: url('/srcPokearena/wallpaper2-1.jpg'); " +
-            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
-            "-fx-background-repeat: no-repeat;";
+                                            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
+                                            "-fx-background-repeat: no-repeat;";
 
     public static String WallpaperBattle2 = "-fx-background-image: url('/srcPokearena/wallpaper3.jpg'); " +
-            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
-            "-fx-background-repeat: no-repeat;";
+                                            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
+                                            "-fx-background-repeat: no-repeat;";
 
     public static String WallpaperBattle3 = "-fx-background-image: url('/srcPokearena/wallpaper4.jpg'); " +
-            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
-            "-fx-background-repeat: no-repeat;";
+                                            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
+                                            "-fx-background-repeat: no-repeat;";
 
     public Scene criarSceneBatalha(int numeroBatalha, List<Pokemon> pokemonsJogador,Stage aStage,Image card){
         this.pokemonsJogador = pokemonsJogador;
@@ -80,27 +90,38 @@ public class TelaBatalha {
 
         Button btnAtacar = new Button();
         Button btnPokemon = new Button();
+        Button btnVoltar = new Button();
 
-        ProgressBar hpJogadorBar = new ProgressBar();
-        hpJogadorBar.setPrefWidth(200);
-        hpJogadorBar.setPrefHeight(20);
+        hpJogadorBar = new ProgressBar();
+        hpJogadorBar.setPrefWidth(300);
+        hpJogadorBar.setPrefHeight(30);
 
-        ProgressBar hpMaquinaBar = new ProgressBar();
-        hpMaquinaBar.setPrefWidth(200);
-        hpMaquinaBar.setPrefHeight(20);
+        hpMaquinaBar = new ProgressBar();
+        hpMaquinaBar.setPrefWidth(300);
+        hpMaquinaBar.setPrefHeight(30);
 
         hpJogadorBar.getStyleClass().add("hp-bar-default");
         hpMaquinaBar.getStyleClass().add("hp-bar-default");
 
+        labelMensagem = new Label("Batalha iniciada! " + batalhaService.getNomeMaquina() + " apareceu!");
+        labelMensagem.setStyle(mensagemStyle);
+        labelMensagem.setWrapText(true);
+        labelMensagem.setMaxWidth(600);
+
+        ScrollPane scrollMensagem = new ScrollPane(labelMensagem);
+        scrollMensagem.setStyle("-fx-background: transparent; -fx-background-color: rgba(0, 0, 0, 0.5);");
+        scrollMensagem.setFitToWidth(true);
+        scrollMensagem.setPrefWidth(600);
+        scrollMensagem.setMaxHeight(140);
         PlayerCard = card;
 
         ImageView cardTrainer = new ImageView(card);
         cardTrainer.setId("cardTrainerIcon");
-        battleScreenService.configImageView(cardTrainer);
+        battleScreenService.configRemainingPokemons(cardTrainer);
         battleScreenService.animacaoHover(cardTrainer);
         Image pokeball = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolas.png")));
         ImageView pokeballNums = new ImageView(pokeball);
-        battleScreenService.configImageView(pokeballNums);
+        battleScreenService.configRemainingPokemons(pokeballNums);
         battleScreenService.animacaoHover(pokeballNums);
 
         HBox TrainerLife = new HBox(20,cardTrainer,pokeballNums);
@@ -110,64 +131,65 @@ public class TelaBatalha {
         Image cardM = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconBrock.png")));
         ImageView cardMaquina = new ImageView(cardM);
         cardTrainer.setId("cardMaquinaIcon");
-        battleScreenService.configImageView(cardMaquina);
+        battleScreenService.configRemainingPokemons(cardMaquina);
         battleScreenService.animacaoHover(cardMaquina);
         Image pokeballM = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolasInvertido.png")));
         ImageView pokeballMNums = new ImageView(pokeballM);
-        battleScreenService.configImageView(pokeballMNums);
+        battleScreenService.configRemainingPokemons(pokeballMNums);
         battleScreenService.animacaoHover(pokeballMNums);
 
         HBox MaquinaLife = new HBox(20,pokeballMNums,cardMaquina);
         MaquinaLife.setAlignment(Pos.CENTER);
         MaquinaLife.setStyle(hboxStyle);
 
-
-        HBox LifeTrainersContainer = new HBox(TrainerLife,MaquinaLife);
+        HBox LifeTrainersContainer = new HBox(TrainerLife,scrollMensagem,MaquinaLife);
         LifeTrainersContainer.setAlignment(Pos.CENTER);
-        LifeTrainersContainer.setSpacing(200);
+        LifeTrainersContainer.setSpacing(220);
 
         battleScreenService.configBtn(btnAtacar);
         battleScreenService.configBtn(btnPokemon);
+        battleScreenService.configBtn(btnVoltar);
         putBtnAtacarImg(btnAtacar);
         putBtnPokemonImg(btnPokemon);
+        putBtnVoltarImg(btnVoltar);
         battleScreenService.animacaoHover(btnAtacar);
         battleScreenService.animacaoHover(btnPokemon);
+        battleScreenService.animacaoHover(btnVoltar);
 
         btnAtacar.setOnAction(e -> atacar());
         btnPokemon.setOnAction(e -> mostrarTrocaPokemon());
 
         HBox actionBar = new HBox(30);
-        actionBar.getChildren().addAll(btnAtacar, btnPokemon);
+        actionBar.getChildren().addAll(btnAtacar, btnPokemon, btnVoltar);
         actionBar.setAlignment(Pos.CENTER);
         actionBar.setStyle(hboxStyle);
 
-        labelMensagem = new Label("Batalha iniciada! " + batalhaService.getNomeMaquina() + " apareceu!");
-        labelMensagem.setStyle(mensagemStyle);
-        labelMensagem.setWrapText(true);
-        labelMensagem.setMaxWidth(1000);
-        labelMensagem.setId("mensagemInicial");
+        pokemonJogador = batalhaService.getPokemonAtualJogador();
+        pokemonMaquina = batalhaService.getPokemonAtualMaquina();
 
-        labelPokemonJogador = new Label();
-        labelHpJogador = new Label();
-        labelPokemonMaquina = new Label();
-        labelHpMaquina = new Label();
-        atualizarLabelsHP();
+        battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
+        battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
 
-        VBox infoBox = new VBox(10);
-        infoBox.setAlignment(Pos.CENTER);
-        infoBox.getChildren().addAll(labelPokemonJogador, labelHpJogador, labelPokemonMaquina, labelHpMaquina);
-        infoBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 15px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        HBox hpBox = new HBox(100);
+        hpBox.setAlignment(Pos.CENTER);
+        hpBox.getChildren().addAll(hpJogadorBar,hpMaquinaBar);
+        hpBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 15px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
 
         trocaPokemonBox = new VBox(10);
         trocaPokemonBox.setAlignment(Pos.CENTER);
         trocaPokemonBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9); -fx-padding: 20px; -fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         trocaPokemonBox.setVisible(false);
 
+        Image imgLabel = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/batalha1.png")));
+        ImageView imgvwLabel = new ImageView(imgLabel);
+        imgvwLabel.setId("imgvwLabel");
+        battleScreenService.configImageView(imgvwLabel);
+
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().addAll(infoBox, trocaPokemonBox,labelMensagem);
+        centerBox.getChildren().addAll(hpBox,imgvwLabel ,trocaPokemonBox);
         centerBox.setPadding(new Insets(20));
-        labelMensagem.setAlignment(Pos.CENTER);
+        centerBox.setAlignment(Pos.CENTER);
 
 
         root = new BorderPane();
@@ -189,23 +211,6 @@ public class TelaBatalha {
         return new Scene(root,battleScreenService.screenWidth,battleScreenService.screenHeight);
     }
 
-    private void atualizarLabelsHP() {
-        Pokemon pokemonJogador = batalhaService.getPokemonAtualJogador();
-        Pokemon pokemonMaquina = batalhaService.getPokemonAtualMaquina();
-
-        labelPokemonJogador.setText("Seu Pokémon: " + pokemonJogador.getNome() + " (" + pokemonJogador.getTipo() + ")");
-        labelPokemonJogador.setStyle(labelStyle);
-
-        labelHpJogador.setText("HP: " + pokemonJogador.getHp() + "/100");
-        labelHpJogador.setStyle(labelStyle);
-
-        labelPokemonMaquina.setText(batalhaService.getNomeMaquina() + ": " + pokemonMaquina.getNome() + " (" + pokemonMaquina.getTipo() + ")");
-        labelPokemonMaquina.setStyle(labelStyle);
-
-        labelHpMaquina.setText("HP: " + pokemonMaquina.getHp() + "/100");
-        labelHpMaquina.setStyle(labelStyle);
-    }
-
     private void atacar() {
         if (batalhaService.isBatalhaTerminada() || batalhaService.isJogoTerminado()) {
             labelMensagem.setText("A batalha terminou!");
@@ -214,7 +219,8 @@ public class TelaBatalha {
 
         String mensagem = batalhaService.jogadorAtaca();
         labelMensagem.setText(mensagem);
-        atualizarLabelsHP();
+        battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
+        battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
 
         if (batalhaService.isBatalhaTerminada()) {
             if (batalhaService.getVencedor().equals("JOGADOR")) {
@@ -280,7 +286,8 @@ public class TelaBatalha {
 
         if (mensagem != null) {
             labelMensagem.setText(mensagem);
-            atualizarLabelsHP();
+            battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
+            battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
             trocaPokemonBox.setVisible(false);
         } else {
             labelMensagem.setText("Não foi possível trocar de pokémon!");

@@ -80,6 +80,11 @@ public class ScreenService {
         iv.setFitHeight(180);
         iv.setPreserveRatio(true);
     }
+    public void configRemainingPokemons(ImageView iv){
+        iv.setFitWidth(600);
+        iv.setFitHeight(140);
+        iv.setPreserveRatio(true);
+    }
     public TranslateTransition criarAnimacaoPosicao(ImageView insignia, double yTarget) {
         javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.millis(DuracaoMS), insignia);
         tt.setToY(yTarget);
@@ -114,22 +119,23 @@ public class ScreenService {
         btn.setScaleY(1.0);
         btn.setStyle(btnStyle);
     }
+    //***********************************************************************************************
 
-    public SequentialTransition animarLabels(Label label, double offScreenLeft, double offScreenRight){
-        TranslateTransition entrar = new TranslateTransition(Duration.seconds(1.0),label);
+    public SequentialTransition animarLabels(Node iv, double offScreenLeft, double offScreenRight){
+        TranslateTransition entrar = new TranslateTransition(Duration.seconds(1.0),iv);
         entrar.setFromX(-offScreenLeft);
         entrar.setToX(0);
 
         PauseTransition pausa = new PauseTransition(Duration.seconds(2.0));
 
-        TranslateTransition sair = new TranslateTransition(Duration.seconds(1.0),label);
+        TranslateTransition sair = new TranslateTransition(Duration.seconds(1.0),iv);
         sair.setToX(offScreenRight);
 
         return new SequentialTransition(entrar,pausa,sair);
     }
 
     // Funções pra trocar as telas
-    public void changeScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
+    public void createNewScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
         Scene newScene = new Scene(root,currentWidth,currentHeight);
         stage.setScene(newScene);
     }
@@ -137,11 +143,13 @@ public class ScreenService {
         stage.setMaximized(true);
         stage.setScene(scene);
     }
+    //***********************************************************************************************
+
     // Função para atualizar a barra de HP do pokemon
     public void atualizarBarraHP(ProgressBar hpBar, double hpAtual, double hpMax) {
         double progress = hpAtual / hpMax;
         hpBar.setProgress(progress);
-        hpBar.getStyleClass().removeAll("hp-full", "hp-medium", "hp-low");
+        hpBar.getStyleClass().removeAll("hp-full", "hp-medium", "hp-low","hp-default");
         if (progress > 0.5) {
             hpBar.getStyleClass().add("hp-full"); // Verde (50% - 100%)
         } else if (progress > 0.2) {
