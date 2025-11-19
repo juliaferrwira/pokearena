@@ -1,17 +1,20 @@
 package com.pokearena.service;
 
+import com.pokearena.model.LigaKanto;
 import javafx.animation.*;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class ScreenService {
     //Variáveis Gerais
@@ -22,6 +25,19 @@ public class ScreenService {
     public int screenWidth = screenSize.width;
     public int screenHeight = screenSize.height;
     public final double offScreenDistance = ((double) screenWidth /2);
+    private final Image fullPokeballs;
+    private final Image twoPokeballs;
+    private final Image onePokeballs;
+    private final Image zeroPokeballs;
+    private final Image fullPokeballsInverted;
+    private final Image twoPokeballsInverted;
+    private final Image onePokeballsInverted;
+    private final Image zeroPokeballsInverted;
+    private final Image cardBrock;
+    private final Image cardMisty;
+    private final Image cardAsh;
+    private final Image cardIcaro;
+    private final Image cardJulia;
 
     // String que guarda o css da barra de hp
     public String cssStyles = """
@@ -84,6 +100,10 @@ public class ScreenService {
         iv.setFitWidth(600);
         iv.setFitHeight(140);
         iv.setPreserveRatio(true);
+    }
+    public void configHpBar(ProgressBar hpbar){
+        hpbar.setPrefWidth(300);
+        hpbar.setPrefHeight(30);
     }
     public TranslateTransition criarAnimacaoPosicao(ImageView insignia, double yTarget) {
         javafx.animation.TranslateTransition tt = new javafx.animation.TranslateTransition(Duration.millis(DuracaoMS), insignia);
@@ -170,9 +190,61 @@ public class ScreenService {
         fadeOut.setFromValue(1.0);
         fadeOut.setToValue(0.0);
 
-        SequentialTransition sequencia = new SequentialTransition(fadeOut,fadeIn);
-
-        return sequencia;
+        return new SequentialTransition(fadeOut,fadeIn);
     }
-    public ScreenService(){}
+
+    public void changePokeballNumsPlayer(ImageView iv,int pokemons){
+        if (pokemons == 3){
+            iv.setImage(fullPokeballs);
+        } else if (pokemons == 2) {
+            iv.setImage(twoPokeballs);
+        } else if (pokemons == 1) {
+            iv.setImage(onePokeballs);
+        } else {
+            iv.setImage(zeroPokeballs);
+        }
+    }
+    public void changePokeballNumsMaquina(ImageView iv,int pokemons){
+        if (pokemons == 3){
+            iv.setImage(fullPokeballsInverted);
+        } else if (pokemons == 2) {
+            iv.setImage(twoPokeballsInverted);
+        } else if (pokemons == 1) {
+            iv.setImage(onePokeballsInverted);
+        } else {
+            iv.setImage(zeroPokeballsInverted);
+        }
+    }
+    public void iniciateBattle(int whatBattle,ImageView cardMaquina,ImageView cardPlayer,int whatCard){
+        if (whatBattle == 1) {
+            cardMaquina.setImage(cardBrock);
+        } else if (whatBattle == 2) {
+            cardMaquina.setImage(cardMisty);
+        } else if (whatBattle == 3) {
+            cardMaquina.setImage(cardAsh);
+        }
+
+        if (whatCard == 1){
+            cardPlayer.setImage(cardIcaro);
+        }
+        else if (whatCard == 2) {
+           cardPlayer.setImage(cardJulia);
+        }
+
+    }
+    public ScreenService(){
+        fullPokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolas.png")));
+        twoPokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/2Pokebolas.png")));
+        onePokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/1Pokebola.png")));
+        zeroPokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/0Pokebolas.png")));
+        fullPokeballsInverted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolasInvertido.png")));
+        twoPokeballsInverted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/2PokebolasInvertido.png")));
+        onePokeballsInverted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/1PokebolasInvertido.png")));
+        zeroPokeballsInverted = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/0PokebolasInvertido.png")));
+        cardBrock = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconBrock.png")));
+        cardMisty = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconMisty.png")));
+        cardAsh = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconAsh.png")));
+        cardIcaro = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconIcaro.png")));
+        cardJulia = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconJulia.png")));
+    }
 }

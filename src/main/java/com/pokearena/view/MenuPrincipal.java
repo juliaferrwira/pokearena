@@ -114,11 +114,11 @@ public class MenuPrincipal extends Application {
         });
         Node cardTrainer1 = selectTrainerScene.lookup("#cardTrainer1");
         Node cardTrainer2 = selectTrainerScene.lookup("#cardTrainer2");
-        TelaBatalha screenBattle = new TelaBatalha();
+        TelaBatalha screenBattle = new TelaBatalha("Kanto");
         cardTrainer1.setOnMouseClicked(e-> {
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Image cardIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconIcaro.png")));
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,1);
+            screenBattle.kanto.battles.add(battle1);
             Node imgvwLabel = battle1.lookup("#imgvwLabel");
             MenuService.changeScene(stage,battle1);
             Platform.runLater(()->{
@@ -128,9 +128,9 @@ public class MenuPrincipal extends Application {
         });
         cardTrainer2.setOnMouseClicked(e->{
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Image cardIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconJulia.png")));
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,2);
             MenuService.changeScene(stage,battle1);
+            screenBattle.kanto.battles.add(battle1);
             battle1.getStylesheets().add(MenuService.dataUrl);
             Node imgvwLabel = battle1.lookup("#imgvwLabel");
             Platform.runLater(()->{
