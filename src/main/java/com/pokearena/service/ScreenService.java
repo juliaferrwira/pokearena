@@ -2,6 +2,7 @@ package com.pokearena.service;
 
 import com.pokearena.model.LigaKanto;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.awt.*;
+import java.awt.desktop.ScreenSleepEvent;
 import java.util.Objects;
 
 public class ScreenService {
@@ -154,6 +156,36 @@ public class ScreenService {
         return new SequentialTransition(entrar,pausa,sair);
     }
 
+    public SequentialTransition atacar(Node iv){
+        TranslateTransition diagonal = new TranslateTransition(Duration.seconds(1.0),iv);
+        diagonal.setFromX(0);
+        diagonal.setFromY(0);
+        diagonal.setToX(50);
+        diagonal.setToY(50);
+
+        TranslateTransition voltar = new TranslateTransition(Duration.seconds(1.0));
+        voltar.setToX(0);
+        voltar.setToY(0);
+
+        return new SequentialTransition(diagonal,voltar);
+    }
+
+    public SequentialTransition tomarDano(Node iv){
+        TranslateTransition direita = new TranslateTransition(Duration.seconds(1.0),iv);
+        direita.setFromX(0);
+        direita.setToX(50);
+
+        TranslateTransition esquerda = new TranslateTransition(Duration.seconds(1.0),iv);
+        esquerda.setFromX(50);
+        esquerda.setToX(-50);
+
+        TranslateTransition inicial = new TranslateTransition(Duration.seconds(1.0),iv);
+        inicial.setFromX(-50);
+        inicial.setToX(0);
+
+        return new SequentialTransition(direita,esquerda,inicial);
+    }
+
     // Funções pra trocar as telas
     public void createNewScene(Stage stage, BorderPane root, double currentWidth, double currentHeight){
         Scene newScene = new Scene(root,currentWidth,currentHeight);
@@ -195,24 +227,32 @@ public class ScreenService {
 
     public void changePokeballNumsPlayer(ImageView iv,int pokemons){
         if (pokemons == 3){
-            iv.setImage(fullPokeballs);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()-> iv.setImage(fullPokeballs));
         } else if (pokemons == 2) {
-            iv.setImage(twoPokeballs);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()-> iv.setImage(twoPokeballs));
         } else if (pokemons == 1) {
-            iv.setImage(onePokeballs);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(onePokeballs));
         } else {
-            iv.setImage(zeroPokeballs);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(zeroPokeballs));
         }
     }
     public void changePokeballNumsMaquina(ImageView iv,int pokemons){
         if (pokemons == 3){
-            iv.setImage(fullPokeballsInverted);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(fullPokeballsInverted));
         } else if (pokemons == 2) {
-            iv.setImage(twoPokeballsInverted);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(twoPokeballsInverted));
         } else if (pokemons == 1) {
-            iv.setImage(onePokeballsInverted);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(onePokeballsInverted));
         } else {
-            iv.setImage(zeroPokeballsInverted);
+            criarTransicaoPokebolas(iv).play();
+            Platform.runLater(()->iv.setImage(zeroPokeballsInverted));
         }
     }
     public void iniciateBattle(int whatBattle,ImageView cardMaquina,ImageView cardPlayer,int whatCard){

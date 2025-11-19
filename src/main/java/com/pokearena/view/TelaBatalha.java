@@ -32,6 +32,9 @@ public class TelaBatalha {
     private Stage stage;
     private int PlayerCard;
 
+    private ImageView pokeballNums;
+    private ImageView pokeballMNums;
+
     private Pokemon pokemonJogador;
     private Pokemon pokemonMaquina;
 
@@ -117,7 +120,7 @@ public class TelaBatalha {
         cardTrainer.setId("cardTrainerIcon");
         battleScreenService.configRemainingPokemons(cardTrainer);
         battleScreenService.animacaoHover(cardTrainer);
-        ImageView pokeballNums = new ImageView();
+        pokeballNums = new ImageView();
         battleScreenService.changePokeballNumsPlayer(pokeballNums,3);
         battleScreenService.configRemainingPokemons(pokeballNums);
         battleScreenService.animacaoHover(pokeballNums);
@@ -130,7 +133,7 @@ public class TelaBatalha {
         cardTrainer.setId("cardMaquinaIcon");
         battleScreenService.configRemainingPokemons(cardMaquina);
         battleScreenService.animacaoHover(cardMaquina);
-        ImageView pokeballMNums = new ImageView();
+        pokeballMNums = new ImageView();
         PlayerCard = whatCard;
         battleScreenService.changePokeballNumsMaquina(pokeballMNums,3);
         battleScreenService.configRemainingPokemons(pokeballMNums);
@@ -268,6 +271,7 @@ public class TelaBatalha {
             Label labelSemOpcoes = new Label("Não há pokémons disponíveis para troca!");
             labelSemOpcoes.setStyle(labelStyle);
             trocaPokemonBox.getChildren().add(labelSemOpcoes);
+            battleScreenService.changePokeballNumsPlayer(pokeballNums,0);
         } else {
             for (Pokemon pokemon : disponiveis) {
                 Button btnTrocar = new Button(pokemon.getNome() + " (HP: " + pokemon.getHp() + "/100)");
@@ -275,6 +279,11 @@ public class TelaBatalha {
                 btnTrocar.setOnAction(e -> trocarPokemon(pokemon));
                 battleScreenService.animacaoHover(btnTrocar);
                 trocaPokemonBox.getChildren().add(btnTrocar);
+            }
+            if (disponiveis.size() == 2){
+                battleScreenService.changePokeballNumsPlayer(pokeballNums,2);
+            } else if (disponiveis.size() == 1) {
+                battleScreenService.changePokeballNumsPlayer(pokeballNums,1);
             }
         }
 
