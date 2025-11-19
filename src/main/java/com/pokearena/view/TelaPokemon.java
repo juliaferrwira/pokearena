@@ -25,28 +25,14 @@ public class TelaPokemon {
     private Button btnProsseguir;
     private Label labelContador;
     private Runnable onProsseguirAction;
+    private ScreenService PokeService;
 
     public static String WallpaperSelectPokemon = "-fx-background-image: url('srcPokearena/wallpaper1.jpg'); " +
                                                    "-fx-background-size: cover; " +
                                                    "-fx-background-position: center center; " +
                                                    "-fx-background-repeat: no-repeat;";
 
-    public void putPokemonImg(Button btn, int pokemonId, String pokemonNome, boolean selecionado){
-        String sufixo = selecionado ? "Red" : "";
-        String imagePath = "/srcPokearena/selecaoPokemons/pokemonsParaSelecao/" + pokemonId + "-" + pokemonNome + sufixo + ".png";
 
-        java.io.InputStream stream = getClass().getResourceAsStream(imagePath);
-        if (stream == null) {
-            return; // se não encontrar a imagem, não faz nada
-        }
-
-        Image image = new Image(stream);
-        ImageView iv = new ImageView(image);
-        iv.setFitWidth(200);
-        iv.setFitHeight(200);
-        iv.setPreserveRatio(true);
-        btn.setGraphic(iv);
-    }
     public void putBtnVoltarImg(Button btn){
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/botoes/btnVoltar.png")));
         ImageView iv = new ImageView(image);
@@ -58,7 +44,7 @@ public class TelaPokemon {
 
     public Scene criarScenePokemon(){
         pokemonsSelecionados = new ArrayList<>();
-        ScreenService PokeService = new ScreenService();
+        PokeService = new ScreenService();
         Image selectPokemon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/selecaoPokemons/nrRestantesPokemons/restantes3.png")));
         ImageView iv = new ImageView(selectPokemon);
         iv.setFitWidth(800);
@@ -83,7 +69,7 @@ public class TelaPokemon {
             Button btnPokemon = new Button();
             btnPokemon.setId("pokemon_" + pokemonIds[i]);
             PokeService.configBtn(btnPokemon);
-            putPokemonImg(btnPokemon, pokemonIds[i], pokemonNomes[i], false);
+            PokeService.putPokemonImg(btnPokemon, pokemonIds[i], pokemonNomes[i], false);
             PokeService.animacaoHover(btnPokemon);
 
             final int index = i; // pra usar dentro do listener
@@ -131,7 +117,7 @@ public class TelaPokemon {
         }
         if (jaSelecionado) {
             pokemonsSelecionados.remove(posicaoRemover);
-            putPokemonImg(btn, pokemonId, pokemonNome, false);
+            PokeService.putPokemonImg(btn, pokemonId, pokemonNome, false);
         } else {
             if (pokemonsSelecionados.size() >= MAX_SELECIONADOS) {
                 return;
@@ -139,7 +125,7 @@ public class TelaPokemon {
             Pokemon pokemon = PokemonFactory.criarPokemonPorId(pokemonId);
             if (pokemon != null) {
                 pokemonsSelecionados.add(pokemon);
-                putPokemonImg(btn, pokemonId, pokemonNome, true);
+                PokeService.putPokemonImg(btn, pokemonId, pokemonNome, true);
             }
         }
         atualizarContador();

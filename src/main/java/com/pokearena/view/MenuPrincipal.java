@@ -117,7 +117,7 @@ public class MenuPrincipal extends Application {
         TelaBatalha screenBattle = new TelaBatalha("Kanto");
         cardTrainer1.setOnMouseClicked(e-> {
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,1);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,1,TelaInsignias.InsiList);
             screenBattle.kanto.battles.add(battle1);
             Node imgvwLabel = battle1.lookup("#imgvwLabel");
             MenuService.changeScene(stage,battle1);
@@ -128,7 +128,7 @@ public class MenuPrincipal extends Application {
         });
         cardTrainer2.setOnMouseClicked(e->{
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
-            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,2);
+            Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,2,TelaInsignias.InsiList);
             MenuService.changeScene(stage,battle1);
             screenBattle.kanto.battles.add(battle1);
             battle1.getStylesheets().add(MenuService.dataUrl);

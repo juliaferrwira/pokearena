@@ -270,7 +270,22 @@ public class ScreenService {
         else if (whatCard == 2) {
            cardPlayer.setImage(cardJulia);
         }
+    }
+    public void putPokemonImg(Button btn, int pokemonId, String pokemonNome, boolean selecionado){
+        String sufixo = selecionado ? "Red" : "";
+        String imagePath = "/srcPokearena/selecaoPokemons/pokemonsParaSelecao/" + pokemonId + "-" + pokemonNome + sufixo + ".png";
 
+        java.io.InputStream stream = getClass().getResourceAsStream(imagePath);
+        if (stream == null) {
+            return; // se não encontrar a imagem, não faz nada
+        }
+
+        Image image = new Image(stream);
+        ImageView iv = new ImageView(image);
+        iv.setFitWidth(200);
+        iv.setFitHeight(200);
+        iv.setPreserveRatio(true);
+        btn.setGraphic(iv);
     }
     public ScreenService(){
         fullPokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolas.png")));

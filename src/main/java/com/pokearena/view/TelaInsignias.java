@@ -26,7 +26,7 @@ public class TelaInsignias {
     public String WallpaperTelaInsignias = "-fx-background-image: url('srcPokearena/wallpaper1.jpg'); " +
                                            "-fx-background-size: cover; " + "-fx-background-position: center center; " +
                                            "-fx-background-repeat: no-repeat;";
-    private static final ArrayList<Insignia> InsiList = new ArrayList<>();
+    public ArrayList<Insignia> InsiList = new ArrayList<>();
 
     public Image imgInsiRock(){
         Insignia brockBadge = new Insignia(1,"Insígnia de Pedra","Pedra","Brock");

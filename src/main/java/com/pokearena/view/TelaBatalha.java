@@ -1,8 +1,10 @@
 package com.pokearena.view;
+import com.pokearena.model.Insignia;
 import com.pokearena.model.LigaKanto;
 import com.pokearena.model.Pokemon;
 import com.pokearena.service.BatalhaService;
 import com.pokearena.service.ScreenService;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,24 +15,34 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class TelaBatalha {
     private static final String hboxStyle = "-fx-background-color: rgba(0, 0, 0, 0.7); " +
-            "-fx-border-color: white; " +
-            "-fx-border-width: 3px; " +
-            "-fx-border-radius: 15px; " +
-            "-fx-background-radius: 15px;";
+                                            "-fx-border-color: white; " +
+                                            "-fx-border-width: 3px; " +
+                                            "-fx-border-radius: 15px; " +
+                                            "-fx-background-radius: 15px;";
+
+    private static final String insiBoxStyle = "-fx-background-color: (250, 245, 230, 0.5); " +
+                                                "-fx-border-color: black; " +
+                                                "-fx-border-width: 3px; " +
+                                                "-fx-border-radius: 5px; " +
+                                                "-fx-background-radius: 15px;";
 
     private static final String labelStyle = "-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;";
     private static final String mensagemStyle = "-fx-font-size: 14px; -fx-text-fill: yellow; -fx-font-weight: bold;";
     private final ScreenService battleScreenService = new ScreenService();
     private Stage stage;
     private int PlayerCard;
+
 
     private ImageView pokeballNums;
     private ImageView pokeballMNums;
@@ -47,6 +59,7 @@ public class TelaBatalha {
     private VBox trocaPokemonBox;
     private Runnable onVoltarAction;
     private List<Pokemon> pokemonsJogador;
+    private ArrayList<Insignia> ListaInsignias;
     public LigaKanto kanto;
 
     public void putBtnAtacarImg(Button btn){
@@ -88,10 +101,11 @@ public class TelaBatalha {
                                             "-fx-background-size: cover; " + "-fx-background-position: center center; " +
                                             "-fx-background-repeat: no-repeat;";
 
-    public Scene criarSceneBatalha(int numeroBatalha, List<Pokemon> pokemonsJogador,Stage aStage,int whatCard){
+    public Scene criarSceneBatalha(int numeroBatalha, List<Pokemon> pokemonsJogador, Stage aStage, int whatCard, ArrayList<Insignia> InsiList){
         this.pokemonsJogador = pokemonsJogador;
         batalhaService = new BatalhaService(pokemonsJogador, numeroBatalha);
         stage = aStage;
+        ListaInsignias = InsiList;
 
         Button btnAtacar = new Button();
         Button btnPokemon = new Button();
@@ -229,9 +243,9 @@ public class TelaBatalha {
             if (batalhaService.getVencedor().equals("JOGADOR")) {
                 int proximaBatalha = batalhaService.getNumeroBatalha() + 1;
                 if (proximaBatalha <= 3) {
+                    ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).mudarAtualDetentor(batalhaService.);
+                    criarDesbloqueioInsignia();
                     labelMensagem.setText(mensagem + "\n\nIniciando próxima batalha...");
-                    PauseTransition pause = getPauseTransition(proximaBatalha);
-                    pause.play();
                 } else {
 
                 }
@@ -247,7 +261,7 @@ public class TelaBatalha {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(e -> {
             List<Pokemon> pokemonsComHpAtual = batalhaService.getPokemonsJogador();
-            Scene proximaBatalhaScene = criarSceneBatalha(proximaBatalha, pokemonsComHpAtual,stage,PlayerCard);
+            Scene proximaBatalhaScene = criarSceneBatalha(proximaBatalha, pokemonsComHpAtual,stage,PlayerCard,ListaInsignias);
             kanto.battles.add(proximaBatalhaScene);
             battleScreenService.changeScene(stage,proximaBatalhaScene);
         });
@@ -280,10 +294,12 @@ public class TelaBatalha {
                 battleScreenService.animacaoHover(btnTrocar);
                 trocaPokemonBox.getChildren().add(btnTrocar);
             }
-            if (disponiveis.size() == 2){
-                battleScreenService.changePokeballNumsPlayer(pokeballNums,2);
-            } else if (disponiveis.size() == 1) {
-                battleScreenService.changePokeballNumsPlayer(pokeballNums,1);
+            if (!pokemonJogador.estaVivo()) {
+                if (disponiveis.size() == 2){
+                    battleScreenService.changePokeballNumsPlayer(pokeballNums,2);
+                } else if (disponiveis.size() == 1) {
+                    battleScreenService.changePokeballNumsPlayer(pokeballNums,1);
+                }
             }
         }
 
@@ -309,6 +325,36 @@ public class TelaBatalha {
         } else {
             labelMensagem.setText("Não foi possível trocar de pokémon!");
         }
+    }
+    public void criarDesbloqueioInsignia(){
+        Stage popUpStage = new Stage();
+        popUpStage.initStyle(javafx.stage.StageStyle.UTILITY);
+        popUpStage.setOnCloseRequest(Event::consume);
+        popUpStage.initOwner(stage);
+        popUpStage.setTitle("Vitória!");
+        Label titulo = new Label("Você Desbloqueou!");
+        titulo.setStyle("-fx-font-size: 24px; -fx-text-fill: black; -fx-font-weight: bold;");
+        ImageView insignia = new ImageView();
+        insignia.setImage(ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).getInsigniaImage());
+        battleScreenService.configImageView(insignia);
+        Label nomeInsi = new Label(ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).getNome());
+        nomeInsi.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+        Button btnVoltar = new Button();
+        battleScreenService.configBtn(btnVoltar);
+        putBtnVoltarImg(btnVoltar);
+        battleScreenService.animacaoHover(btnVoltar);
+        VBox insiContainer = new VBox(20,titulo,insignia,nomeInsi,btnVoltar);
+        insiContainer.setStyle(insiBoxStyle);
+        insiContainer.setAlignment(Pos.CENTER);
+
+        btnVoltar.setOnAction(e->{
+            popUpStage.close();
+            getPauseTransition(batalhaService.getNumeroBatalha() + 1).play();
+        });
+
+        Scene popUpScene = new Scene(insiContainer, 650, 400);
+        popUpStage.setScene(popUpScene);
+        popUpStage.showAndWait();
     }
 
     public void setOnVoltarAction(Runnable action) {
