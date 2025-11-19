@@ -22,6 +22,7 @@ import java.util.Objects;
 public class TelaPokemon {
     private static final int MAX_SELECIONADOS = 3;
     private List<Pokemon> pokemonsSelecionados;
+    private Button btnProsseguir;
     private Label labelContador;
     private Runnable onProsseguirAction;
 
@@ -94,9 +95,14 @@ public class TelaPokemon {
         labelContador = new Label("Selecione 3 pokémons (0/3)");
         labelContador.setStyle("-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;");
 
+        btnProsseguir = new Button("Prosseguir");
+        btnProsseguir.setStyle("-fx-font-size: 20px; -fx-padding: 15 30; -fx-background-color: #cccccc; " +
+                "-fx-text-fill: #666666; -fx-font-weight: bold; -fx-background-radius: 10;");
+        btnProsseguir.setDisable(true);
+
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().addAll(gridPokemons, labelContador);
+        centerBox.getChildren().addAll(gridPokemons, labelContador, btnProsseguir);
         centerBox.setPadding(new Insets(20));
 
         HBox topBox = new HBox(btnVoltar,iv);
@@ -140,10 +146,14 @@ public class TelaPokemon {
     }
     private void atualizarContador(){
         int selecionados = pokemonsSelecionados.size();
+        btnProsseguir.setDisable(true);
         labelContador.setText("Selecione 3 pokémons (" + selecionados + "/3)");
         
         if (selecionados == MAX_SELECIONADOS && onProsseguirAction != null) {
-            onProsseguirAction.run();
+            btnProsseguir.setDisable(false);
+            btnProsseguir.setOnAction(e->{
+                onProsseguirAction.run();
+            });
         }
     }
 
