@@ -10,12 +10,14 @@ public class BatalhaService {
     private Pokemon pokemonAtualJogador;
     private Pokemon pokemonAtualMaquina;
     private int indicePokemonAtualJogador;
-    private int indicePokemonAtualMaquina;
+    public int indicePokemonAtualMaquina;
     private boolean batalhaTerminada;
     private String vencedor;
     private int numeroBatalha;
     private String nomeMaquina;
     private boolean jogoTerminado;
+    public int trocasMaquina;
+    public int trocasPlayer;
 
     public BatalhaService(List<Pokemon> pokemonsJogador, int numeroBatalha) {
         this.pokemonsJogador = criarCopiasPokemons(pokemonsJogador);
@@ -30,6 +32,8 @@ public class BatalhaService {
         this.indicePokemonAtualMaquina = 0;
         this.pokemonAtualJogador = this.pokemonsJogador.get(0);
         this.pokemonAtualMaquina = this.pokemonsMaquina.get(0);
+        this.trocasMaquina = 0;
+        this.trocasPlayer = 0;
     }
 
     private List<Pokemon> criarCopiasPokemons(List<Pokemon> originais) {
@@ -130,6 +134,7 @@ public class BatalhaService {
             mensagem += "\n" + pokemonAtualMaquina.getNome() + " foi derrotado!";
             
             if (temPokemonVivo(pokemonsMaquina)) {
+                trocasMaquina++;
                 trocarPokemonMaquina();
                 mensagem += "\n" + nomeMaquina + " trocou para " + pokemonAtualMaquina.getNome() + "!";
             } else {

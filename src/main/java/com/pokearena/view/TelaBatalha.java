@@ -4,9 +4,12 @@ import com.pokearena.model.LigaKanto;
 import com.pokearena.model.Pokemon;
 import com.pokearena.service.BatalhaService;
 import com.pokearena.service.ScreenService;
+import javafx.animation.SequentialTransition;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
@@ -31,7 +34,7 @@ public class TelaBatalha {
                                             "-fx-border-radius: 15px; " +
                                             "-fx-background-radius: 15px;";
 
-    private static final String insiBoxStyle = "-fx-background-color: (250, 245, 230, 0.5); " +
+    private static final String insiBoxStyle = "-fx-background-color: rgba(250, 245, 230, 0.5); " +
                                                 "-fx-border-color: black; " +
                                                 "-fx-border-width: 3px; " +
                                                 "-fx-border-radius: 5px; " +
@@ -43,6 +46,8 @@ public class TelaBatalha {
     private Stage stage;
     private int PlayerCard;
 
+    private ImageView imgvwLabel;
+    private String TrainerName;
 
     private ImageView pokeballNums;
     private ImageView pokeballMNums;
@@ -52,6 +57,9 @@ public class TelaBatalha {
 
     private ProgressBar hpJogadorBar;
     private ProgressBar hpMaquinaBar;
+
+    private ImageView jogadorSprite;
+    private ImageView maquinaSprite;
 
     private BatalhaService batalhaService;
     private Label labelMensagem;
@@ -106,6 +114,11 @@ public class TelaBatalha {
         batalhaService = new BatalhaService(pokemonsJogador, numeroBatalha);
         stage = aStage;
         ListaInsignias = InsiList;
+        if (whatCard == 1){
+            TrainerName="Ícaro";
+        } else {
+            TrainerName="Júlia";
+        }
 
         Button btnAtacar = new Button();
         Button btnPokemon = new Button();
@@ -175,6 +188,7 @@ public class TelaBatalha {
 
         btnAtacar.setOnAction(e -> atacar());
         btnPokemon.setOnAction(e -> mostrarTrocaPokemon());
+        btnVoltar.setId("PokeBtnVoltar");
 
         HBox actionBar = new HBox(30);
         actionBar.getChildren().addAll(btnAtacar, btnPokemon, btnVoltar);
@@ -187,35 +201,57 @@ public class TelaBatalha {
         battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
         battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
 
-        HBox hpBox = new HBox(100);
-        hpBox.setAlignment(Pos.CENTER);
-        hpBox.getChildren().addAll(hpJogadorBar,hpMaquinaBar);
-        hpBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7); -fx-padding: 15px; -fx-border-radius: 10px; -fx-background-radius: 10px;");
+        jogadorSprite = new ImageView();
+        maquinaSprite = new ImageView();
+
+        StackPane jogadorArea = new StackPane();
+        jogadorArea.getChildren().addAll(jogadorSprite,hpJogadorBar);
+        StackPane.setAlignment(hpJogadorBar, Pos.BOTTOM_LEFT);
+        StackPane.setAlignment(jogadorSprite, Pos.BOTTOM_LEFT);
+        jogadorSprite.setTranslateY(30);
+        jogadorSprite.setTranslateX(800);
+        hpJogadorBar.setTranslateX(800);
+        battleScreenService.putPokemonImgBattle(jogadorSprite, pokemonJogador.getNome(), true);
+
+        StackPane maquinaArea = new StackPane();
+        maquinaArea.getChildren().addAll(hpMaquinaBar, maquinaSprite);
+        StackPane.setAlignment(hpMaquinaBar, Pos.BOTTOM_RIGHT);
+        StackPane.setAlignment(maquinaSprite, Pos.BOTTOM_RIGHT);
+
+        maquinaSprite.setTranslateY(-60);
+        maquinaSprite.setTranslateX(800);
+        hpMaquinaBar.setTranslateX(800);
+        battleScreenService.putPokemonImgBattle(maquinaSprite, pokemonMaquina.getNome(), false);
 
         trocaPokemonBox = new VBox(10);
         trocaPokemonBox.setAlignment(Pos.CENTER);
         trocaPokemonBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9); -fx-padding: 20px; -fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         trocaPokemonBox.setVisible(false);
 
-        Image imgLabel = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/batalha1.png")));
-        ImageView imgvwLabel = new ImageView(imgLabel);
+
+        imgvwLabel = new ImageView(battleScreenService.updateLabelInfo(numeroBatalha));
         imgvwLabel.setId("imgvwLabel");
         battleScreenService.configImageView(imgvwLabel);
 
         VBox centerBox = new VBox(20);
         centerBox.setAlignment(Pos.CENTER);
-        centerBox.getChildren().addAll(hpBox,imgvwLabel ,trocaPokemonBox);
+        centerBox.getChildren().addAll(trocaPokemonBox,imgvwLabel);
         centerBox.setPadding(new Insets(20));
-        centerBox.setAlignment(Pos.CENTER);
+        VBox.setVgrow(jogadorArea, Priority.ALWAYS);
 
+        VBox bottomContainer = new VBox(5);
+        bottomContainer.setAlignment(Pos.CENTER);
+        bottomContainer.getChildren().addAll(jogadorArea,maquinaArea,actionBar);
 
         root = new BorderPane();
         root.setTop(LifeTrainersContainer);
         root.setCenter(centerBox);
-        root.setBottom(actionBar);
-        BorderPane.setAlignment(actionBar, Pos.CENTER);
+        root.setBottom(bottomContainer);
+        BorderPane.setAlignment(bottomContainer, Pos.CENTER);
         BorderPane.setAlignment(LifeTrainersContainer,Pos.CENTER);
+        BorderPane.setAlignment(centerBox,Pos.CENTER);
         BorderPane.setMargin(actionBar, new Insets(10, 15, 10, 15));
+
 
         if(numeroBatalha == 1){
             root.setStyle(WallpaperBattle1);
@@ -230,12 +266,32 @@ public class TelaBatalha {
 
     private void atacar() {
         if (batalhaService.isBatalhaTerminada() || batalhaService.isJogoTerminado()) {
+            battleScreenService.changePokeballNumsMaquina(pokeballMNums,0);
             labelMensagem.setText("A batalha terminou!");
             return;
         }
 
         String mensagem = batalhaService.jogadorAtaca();
         labelMensagem.setText(mensagem);
+        if (!pokemonMaquina.estaVivo()) {
+            if (batalhaService.trocasMaquina == 1) {
+                battleScreenService.changePokeballNumsMaquina(pokeballMNums, 2);
+            } else if (batalhaService.trocasMaquina == 2 && pokemonMaquina.estaVivo()) {
+                battleScreenService.changePokeballNumsMaquina(pokeballMNums, 1);
+            } else if (batalhaService.trocasMaquina == 2 ) {
+                battleScreenService.changePokeballNumsMaquina(pokeballMNums, 0);
+            }
+        }
+
+        if (!pokemonJogador.estaVivo()) {
+            if (pokeDisponiveis() == 2){
+                battleScreenService.changePokeballNumsPlayer(pokeballNums,2);
+            } else if (pokeDisponiveis() == 1) {
+                battleScreenService.changePokeballNumsPlayer(pokeballNums,1);
+            } else if (pokeDisponiveis() == 0){
+                battleScreenService.changePokeballNumsPlayer(pokeballNums,0);
+            }
+        }
         battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
         battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
 
@@ -243,17 +299,16 @@ public class TelaBatalha {
             if (batalhaService.getVencedor().equals("JOGADOR")) {
                 int proximaBatalha = batalhaService.getNumeroBatalha() + 1;
                 if (proximaBatalha <= 3) {
-                    ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).mudarAtualDetentor(batalhaService.);
+                    ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).mudarAtualDetentor(TrainerName,ListaInsignias.get(batalhaService.getNumeroBatalha() - 1));
                     criarDesbloqueioInsignia();
                     labelMensagem.setText(mensagem + "\n\nIniciando próxima batalha...");
-                } else {
-
                 }
             }
         }
 
         if (batalhaService.isJogoTerminado()) {
             labelMensagem.setText(mensagem + "\nGAME OVER!");
+
         }
     }
 
@@ -264,6 +319,10 @@ public class TelaBatalha {
             Scene proximaBatalhaScene = criarSceneBatalha(proximaBatalha, pokemonsComHpAtual,stage,PlayerCard,ListaInsignias);
             kanto.battles.add(proximaBatalhaScene);
             battleScreenService.changeScene(stage,proximaBatalhaScene);
+            Platform.runLater(()->{
+                SequentialTransition animarLabels = battleScreenService.animarLabels(imgvwLabel,battleScreenService.offScreenDistance + 800,battleScreenService.offScreenDistance + 800);
+                animarLabels.play();
+            });
         });
         return pause;
     }
@@ -285,7 +344,6 @@ public class TelaBatalha {
             Label labelSemOpcoes = new Label("Não há pokémons disponíveis para troca!");
             labelSemOpcoes.setStyle(labelStyle);
             trocaPokemonBox.getChildren().add(labelSemOpcoes);
-            battleScreenService.changePokeballNumsPlayer(pokeballNums,0);
         } else {
             for (Pokemon pokemon : disponiveis) {
                 Button btnTrocar = new Button(pokemon.getNome() + " (HP: " + pokemon.getHp() + "/100)");
@@ -293,13 +351,6 @@ public class TelaBatalha {
                 btnTrocar.setOnAction(e -> trocarPokemon(pokemon));
                 battleScreenService.animacaoHover(btnTrocar);
                 trocaPokemonBox.getChildren().add(btnTrocar);
-            }
-            if (!pokemonJogador.estaVivo()) {
-                if (disponiveis.size() == 2){
-                    battleScreenService.changePokeballNumsPlayer(pokeballNums,2);
-                } else if (disponiveis.size() == 1) {
-                    battleScreenService.changePokeballNumsPlayer(pokeballNums,1);
-                }
             }
         }
 
@@ -310,6 +361,10 @@ public class TelaBatalha {
 
         trocaPokemonBox.setVisible(true);
     }
+    private int pokeDisponiveis(){
+        List<Pokemon> disponiveis = batalhaService.getPokemonsDisponiveisParaTroca();
+        return disponiveis.size();
+    }
 
     private void trocarPokemon(Pokemon pokemon) {
         int indice = batalhaService.getPokemonsJogador().indexOf(pokemon);
@@ -317,8 +372,10 @@ public class TelaBatalha {
 
         if (mensagem != null) {
             labelMensagem.setText(mensagem);
-            hpJogadorBar = new ProgressBar();
-            hpMaquinaBar = new ProgressBar();
+            this.pokemonJogador = batalhaService.getPokemonAtualJogador();
+            this.pokemonMaquina = batalhaService.getPokemonAtualMaquina();
+            battleScreenService.putPokemonImgBattle(jogadorSprite, pokemonJogador.getNome(), true);
+            battleScreenService.putPokemonImgBattle(maquinaSprite, pokemonMaquina.getNome(), false);
             battleScreenService.atualizarBarraHP(hpJogadorBar,pokemonJogador.getHp(),100);
             battleScreenService.atualizarBarraHP(hpMaquinaBar,pokemonMaquina.getHp(),100);
             trocaPokemonBox.setVisible(false);
@@ -338,7 +395,7 @@ public class TelaBatalha {
         insignia.setImage(ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).getInsigniaImage());
         battleScreenService.configImageView(insignia);
         Label nomeInsi = new Label(ListaInsignias.get(batalhaService.getNumeroBatalha() - 1).getNome());
-        nomeInsi.setStyle("-fx-font-size: 16px; -fx-text-fill: black;");
+        nomeInsi.setStyle("-fx-font-size: 16px; -fx-text-fill: black;-fx-font-weight: bold;");
         Button btnVoltar = new Button();
         battleScreenService.configBtn(btnVoltar);
         putBtnVoltarImg(btnVoltar);

@@ -44,21 +44,21 @@ public class ScreenService {
     // String que guarda o css da barra de hp
     public String cssStyles = """
         .hp-bar-default > .track {
-            -fx-control-inner-background: #444444; /* Cor escura do fundo da barra */
+            -fx-control-inner-background: #444444;
             -fx-background-radius: 5;
         }
         .hp-full > .bar {
-            -fx-background-color: linear-gradient(to bottom, #7FFF00, #4c9600);
+            -fx-background-color: linear-gradient(to bottom, #8BC34A, #4CAF50); /* Tons de Verde Maçã */
             -fx-background-radius: 5;
             -fx-padding: 3px;
         }
         .hp-medium > .bar {
-            -fx-background-color: linear-gradient(to bottom, #FFD700, #ff8c00);
+            -fx-background-color: linear-gradient(to bottom, #FFCA28, #FF9800); /* Tons de Âmbar */
             -fx-background-radius: 5;
             -fx-padding: 3px;
         }
         .hp-low > .bar {
-            -fx-background-color: linear-gradient(to bottom, #FF6347, #b22222);
+            -fx-background-color: linear-gradient(to bottom, #E53935, #C62828); /* Tons de Vermelho Escarlate */
             -fx-background-radius: 5;
             -fx-padding: 3px;
         }
@@ -286,6 +286,32 @@ public class ScreenService {
         iv.setFitHeight(200);
         iv.setPreserveRatio(true);
         btn.setGraphic(iv);
+    }
+    public void putPokemonImgBattle(ImageView iv,String pokemonNome, boolean trainer){
+        String sufixo = trainer ? "Back1" : "";
+        String num = trainer ? "" : "1";
+        String imagePath = "/srcPokearena/spritesPokemons/" + pokemonNome + "/" + pokemonNome+ num + sufixo + ".png";
+
+        java.io.InputStream stream = getClass().getResourceAsStream(imagePath);
+        if (stream == null) {
+            return; // se não encontrar a imagem, não faz nada
+        }
+
+        Image image = new Image(stream);
+        iv.setImage(image);
+        iv.setFitWidth(200);
+        iv.setFitHeight(200);
+        iv.setPreserveRatio(true);
+    }
+    public Image updateLabelInfo(int whatBattle){
+        if (whatBattle == 1) {
+            return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/batalha1.png")));
+        } else if (whatBattle == 2) {
+            return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/batalha2.png")));
+        } else if (whatBattle == 3) {
+            return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/batalha3.png")));
+        }
+        return null;
     }
     public ScreenService(){
         fullPokeballs = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/fullPokebolas.png")));
