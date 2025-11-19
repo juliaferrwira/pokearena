@@ -1,9 +1,7 @@
 package com.pokearena.view;
-
 import com.pokearena.model.Pokemon;
 import com.pokearena.repository.BancoDeDados;
 import com.pokearena.service.ScreenService;
-import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -45,9 +43,9 @@ public class MenuPrincipal extends Application {
     }
 
     public static String backgroundStyle = "-fx-background-image: url('srcPokearena/wallpaper2.jpg'); " +
-                                           "-fx-background-size: cover; " +
-                                           "-fx-background-position: center center; " +
-                                           "-fx-background-repeat: no-repeat;";
+            "-fx-background-size: cover; " +
+            "-fx-background-position: center center; " +
+            "-fx-background-repeat: no-repeat;";
 
     @Override
     public void start(Stage stage){
@@ -121,11 +119,10 @@ public class MenuPrincipal extends Application {
             List<Pokemon> pokemonsSelecionados = telaPokemon.getPokemonsSelecionados();
             Image cardIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/srcPokearena/batalhas/iconIcaro.png")));
             Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
+            Node imgvwLabel = battle1.lookup("#imgvwLabel");
             MenuService.changeScene(stage,battle1);
-            Node mensagemInicial = battle1.lookup("#mensagemInicial");
-            Label AppearMsg = (Label) mensagemInicial;
             Platform.runLater(()->{
-                SequentialTransition animarLabels = MenuService.animarLabels(AppearMsg,MenuService.offScreenDistance + AppearMsg.getWidth(),MenuService.offScreenDistance + AppearMsg.getWidth());
+                SequentialTransition animarLabels = MenuService.animarLabels(imgvwLabel,MenuService.offScreenDistance + 800,MenuService.offScreenDistance + 800);
                 animarLabels.play();
             });
         });
@@ -135,10 +132,9 @@ public class MenuPrincipal extends Application {
             Scene battle1 = screenBattle.criarSceneBatalha(1, pokemonsSelecionados,stage,cardIcon);
             MenuService.changeScene(stage,battle1);
             battle1.getStylesheets().add(MenuService.dataUrl);
-            Node mensagemInicial = battle1.lookup("#mensagemInicial");
-            Label AppearMsg = (Label) mensagemInicial;
+            Node imgvwLabel = battle1.lookup("#imgvwLabel");
             Platform.runLater(()->{
-                SequentialTransition animarLabels = MenuService.animarLabels(AppearMsg,MenuService.offScreenDistance + AppearMsg.getWidth(),MenuService.offScreenDistance + AppearMsg.getWidth());
+                SequentialTransition animarLabels = MenuService.animarLabels(imgvwLabel,MenuService.offScreenDistance + 800,MenuService.offScreenDistance + 800);
                 animarLabels.play();
             });
         });
@@ -147,16 +143,16 @@ public class MenuPrincipal extends Application {
 
     public static void exibirPokemons() {
         List<Pokemon> pokemons = BancoDeDados.listarPokemons();
-        
+
         if (pokemons.isEmpty()) {
             System.out.println("Nenhum pokemon cadastrado.");
             return;
         }
-        
+
         System.out.println("\n=== POKÉMONS CADASTRADOS ===");
         for (Pokemon pokemon : pokemons) {
-            System.out.println(pokemon.getNome() + " - Tipo: " + pokemon.getTipo() + 
-                             " - HP: " + pokemon.getHp() + "/" + pokemon.getHpMaximo());
+            System.out.println(pokemon.getNome() + " - Tipo: " + pokemon.getTipo() +
+                    " - HP: " + pokemon.getHp() + "/" + pokemon.getHpMaximo());
         }
     }
     public static void main(String[] args) {
@@ -172,5 +168,3 @@ public class MenuPrincipal extends Application {
         launch(args);
     }
 }
-
-
