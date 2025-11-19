@@ -209,8 +209,9 @@ public class TelaBatalha {
         StackPane.setAlignment(hpJogadorBar, Pos.BOTTOM_LEFT);
         StackPane.setAlignment(jogadorSprite, Pos.BOTTOM_LEFT);
         jogadorSprite.setTranslateY(30);
-        jogadorSprite.setTranslateX(800);
-        hpJogadorBar.setTranslateX(800);
+        hpJogadorBar.setTranslateY(40);
+        jogadorSprite.setTranslateX(200);
+        hpJogadorBar.setTranslateX(200);
         battleScreenService.putPokemonImgBattle(jogadorSprite, pokemonJogador.getNome(), true);
 
         StackPane maquinaArea = new StackPane();
@@ -219,13 +220,14 @@ public class TelaBatalha {
         StackPane.setAlignment(maquinaSprite, Pos.BOTTOM_RIGHT);
 
         maquinaSprite.setTranslateY(-60);
-        maquinaSprite.setTranslateX(800);
-        hpMaquinaBar.setTranslateX(800);
+        hpMaquinaBar.setTranslateY(-60);
+        maquinaSprite.setTranslateX(-200);
+        hpMaquinaBar.setTranslateX(-200);
         battleScreenService.putPokemonImgBattle(maquinaSprite, pokemonMaquina.getNome(), false);
 
-        trocaPokemonBox = new VBox(10);
+        trocaPokemonBox = new VBox(5);
         trocaPokemonBox.setAlignment(Pos.CENTER);
-        trocaPokemonBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9); -fx-padding: 20px; -fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 15px; -fx-background-radius: 15px;");
+        trocaPokemonBox.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9); -fx-border-color: yellow; -fx-border-width: 3px; -fx-border-radius: 15px; -fx-background-radius: 15px;");
         trocaPokemonBox.setVisible(false);
 
 
@@ -250,7 +252,7 @@ public class TelaBatalha {
         BorderPane.setAlignment(bottomContainer, Pos.CENTER);
         BorderPane.setAlignment(LifeTrainersContainer,Pos.CENTER);
         BorderPane.setAlignment(centerBox,Pos.CENTER);
-        BorderPane.setMargin(actionBar, new Insets(10, 15, 10, 15));
+        BorderPane.setMargin(actionBar, new Insets(0, 15, 10, 15));
 
 
         if(numeroBatalha == 1){
